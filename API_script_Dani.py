@@ -14,7 +14,7 @@ HEADERS = {"Authorization": f"Bearer {HF_TOKEN}"}
 # Or it can be called with a Model ID to get more information about a specific model.
 
 
-### First, let's get a list of top LLM models
+### First, let's get a list of top LLM models in the category 'text-generation'
 
 def get_top_llm_models(limit=50, pipeline_tag="text-generation"):
     """
