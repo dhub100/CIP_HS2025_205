@@ -46,7 +46,7 @@ def get_top_llm_models(limit=50, pipeline_tag="text-generation"):
 
 # Get top LLM models
 
-models = get_top_llm_models(limit=50)
+models = get_top_llm_models(limit=100)
 print(models[:10])
 
 
@@ -144,7 +144,7 @@ with open("top_llms.txt", "r", encoding="utf-8") as f:
 
 df = get_model_metadata(models)
 print(df.head())
-
+print(df.shape)
 
 ### Fourth, we extract model size based on the modelId string
 
@@ -164,4 +164,4 @@ def extract_model_size(model_id):
 df["model_size"] = df["modelId"].apply(extract_model_size)
 
 # Save as csv file
-df.to_csv("huggingface_llm_metadata.csv", index=False)
+df.to_csv("huggingface_100_llm_metadata.csv", index=False)
