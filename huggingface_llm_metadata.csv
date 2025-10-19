@@ -1,51 +1,101 @@
-modelId,model_size,author,license,language,pipeline_tag,downloads,likes,gated,createdAt,lastModified,usedStorage,model_type,performance_mmlu,performance_gsm8k,performance_arc,cost_per_million_tokens,ranking_overall
-openai-community/gpt2,,openai-community,mit,en,text-generation,10605001,2981,False,2022-03-02T23:29:04.000Z,2024-02-19T10:57:45.000Z,11977009063,gpt2,,,,,
-google/gemma-3-1b-it,1B,google,gemma,,text-generation,7106890,650,manual,2025-03-10T12:09:00.000Z,2025-04-04T13:12:40.000Z,10671219620,gemma3_text,,,,,
-Qwen/Qwen3-0.6B,0.6B,Qwen,apache-2.0,,text-generation,6830099,699,False,2025-04-27T03:40:08.000Z,2025-07-26T03:46:27.000Z,4522815806,qwen3,,,,,
-meta-llama/Llama-3.1-8B-Instruct,8B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,6170416,4733,manual,2024-07-18T08:56:00.000Z,2024-09-25T17:00:57.000Z,32123357950,llama,,,,,
-openai/gpt-oss-20b,20B,openai,apache-2.0,,text-generation,6102832,3689,False,2025-08-04T22:33:29.000Z,2025-08-26T17:25:47.000Z,41321532546,gpt_oss,,,,,
-Qwen/Qwen3-32B,32B,Qwen,apache-2.0,,text-generation,5934956,547,False,2025-04-27T03:52:59.000Z,2025-07-26T03:45:22.000Z,65535751214,qwen3,,,,,
-Qwen/Qwen2.5-3B-Instruct,3B,Qwen,other,['en'],text-generation,5578513,318,False,2024-09-17T14:08:52.000Z,2024-09-25T12:33:00.000Z,6171926992,qwen2,,,,,
-meta-llama/Llama-3.2-1B-Instruct,1B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,5428163,1109,manual,2024-09-18T15:12:47.000Z,2024-10-24T15:07:51.000Z,4945506836,llama,,,,,
-Qwen/Qwen3-Next-80B-A3B-Instruct,80B,Qwen,apache-2.0,,text-generation,5193289,811,False,2025-09-09T15:40:56.000Z,2025-09-17T06:57:40.000Z,162670584182,qwen3_next,,,,,
-Qwen/Qwen2.5-7B-Instruct,7B,Qwen,apache-2.0,['en'],text-generation,5168217,819,False,2024-09-16T11:55:40.000Z,2025-01-12T02:10:10.000Z,15231271888,qwen2,,,,,
-facebook/opt-125m,,facebook,other,en,text-generation,4984781,220,False,2022-05-11T08:25:17.000Z,2023-09-15T13:10:03.000Z,7730636582,opt,,,,,
-trl-internal-testing/tiny-Qwen2ForCausalLM-2.5,,trl-internal-testing,,,text-generation,4974550,1,False,2024-11-25T15:06:15.000Z,2025-09-24T04:53:29.000Z,69779520,qwen2,,,,,
-Gensyn/Qwen2.5-0.5B-Instruct,0.5B,Gensyn,apache-2.0,['en'],text-generation,4838799,23,False,2025-03-28T21:57:22.000Z,2025-03-31T13:32:41.000Z,1929574139,qwen2,,,,,
-dphn/dolphin-2.9.1-yi-1.5-34b,34B,dphn,apache-2.0,,text-generation,4678228,40,False,2024-05-18T04:50:56.000Z,2025-09-08T05:56:56.000Z,68778931137,llama,,,,,
-Qwen/Qwen2.5-1.5B-Instruct,1.5B,Qwen,apache-2.0,['en'],text-generation,4096503,518,False,2024-09-17T14:10:29.000Z,2024-09-25T12:32:50.000Z,3087467144,qwen2,,,,,
-openai/gpt-oss-120b,120B,openai,apache-2.0,,text-generation,3381750,3967,False,2025-08-04T22:33:06.000Z,2025-08-26T17:25:03.000Z,195763884726,gpt_oss,,,,,
-context-labs/meta-llama-Llama-3.2-3B-Instruct-FP16,3B,context-labs,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,3126447,7,False,2025-02-22T01:43:43.000Z,2025-02-22T04:09:45.000Z,12853298144,llama,,,,,
-TinyLlama/TinyLlama-1.1B-Chat-v1.0,1.1B,TinyLlama,apache-2.0,['en'],text-generation,3119651,1423,False,2023-12-30T06:27:30.000Z,2024-03-17T05:07:08.000Z,6604219014,llama,,,,,
-distilbert/distilgpt2,,distilbert,apache-2.0,en,text-generation,2901038,586,False,2022-03-02T23:29:04.000Z,2024-02-19T11:09:53.000Z,8079459096,gpt2,,,,,
-bigscience/bloomz-560m,,bigscience,bigscience-bloom-rail-1.0,"['ak', 'ar', 'as', 'bm', 'bn', 'ca', 'code', 'en', 'es', 'eu', 'fon', 'fr', 'gu', 'hi', 'id', 'ig', 'ki', 'kn', 'lg', 'ln', 'ml', 'mr', 'ne', 'nso', 'ny', 'or', 'pa', 'pt', 'rn', 'rw', 'sn', 'st', 'sw', 'ta', 'te', 'tn', 'ts', 'tum', 'tw', 'ur', 'vi', 'wo', 'xh', 'yo', 'zh', 'zu']",text-generation,2784478,128,False,2022-10-08T16:14:42.000Z,2023-05-27T17:27:11.000Z,2797455940,bloom,,,,,
-deepseek-ai/DeepSeek-R1-Distill-Qwen-32B,32B,deepseek-ai,mit,,text-generation,2781942,1450,False,2025-01-20T09:19:00.000Z,2025-02-24T03:31:29.000Z,65527841532,qwen2,,,,,
-Qwen/Qwen2.5-7B,7B,Qwen,apache-2.0,['en'],text-generation,2280114,233,False,2024-09-15T12:17:40.000Z,2024-09-25T12:32:32.000Z,15231271888,qwen2,,,,,
-Qwen/Qwen3-8B,8B,Qwen,apache-2.0,,text-generation,2089370,666,False,2025-04-27T03:42:21.000Z,2025-07-26T03:49:13.000Z,16392939430,qwen3,,,,,
-Qwen/Qwen3-4B-Instruct-2507,4B,Qwen,apache-2.0,,text-generation,2077949,385,False,2025-08-05T10:58:03.000Z,2025-09-17T06:56:53.000Z,64383326441,qwen3,,,,,
-meta-llama/Llama-3.2-3B-Instruct,3B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,1924617,1755,manual,2024-09-18T15:19:20.000Z,2024-10-24T15:07:29.000Z,12853298144,llama,,,,,
-meta-llama/Llama-3.2-1B,1B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,1890715,2111,manual,2024-09-18T15:03:14.000Z,2024-10-24T15:08:03.000Z,5142244878,llama,,,,,
-petals-team/StableBeluga2,,petals-team,,['en'],text-generation,1830237,20,False,2023-08-12T22:04:01.000Z,2023-08-23T18:00:41.000Z,551815602022,llama,,,,,
-meta-llama/Meta-Llama-3-8B,8B,meta-llama,llama3,['en'],text-generation,1773804,6343,manual,2024-04-17T09:35:16.000Z,2024-09-27T15:52:33.000Z,48183894272,llama,,,,,
-Qwen/Qwen2.5-0.5B-Instruct,0.5B,Qwen,apache-2.0,['en'],text-generation,1729013,376,False,2024-09-16T11:52:46.000Z,2024-09-25T12:32:56.000Z,988097824,qwen2,,,,,
-Qwen/Qwen3-30B-A3B-Instruct-2507,30B,Qwen,apache-2.0,,text-generation,1608742,607,False,2025-07-28T07:31:27.000Z,2025-09-17T06:56:43.000Z,61079824827,qwen3_moe,,,,,
-Qwen/Qwen2.5-14B-Instruct,14B,Qwen,apache-2.0,['en'],text-generation,1594624,276,False,2024-09-16T11:56:10.000Z,2024-09-25T12:33:04.000Z,29540134000,qwen2,,,,,
-Qwen/Qwen3-Next-80B-A3B-Thinking,80B,Qwen,apache-2.0,,text-generation,1575871,426,False,2025-09-09T15:45:31.000Z,2025-09-15T09:12:48.000Z,162670584182,qwen3_next,,,,,
-meta-llama/Llama-2-7b-hf,7B,meta-llama,llama2,['en'],text-generation,1485405,2165,manual,2023-07-13T16:16:13.000Z,2024-04-17T08:40:16.000Z,53909360564,llama,,,,,
-Qwen/Qwen3-4B,4B,Qwen,apache-2.0,,text-generation,1456642,413,False,2025-04-27T03:41:29.000Z,2025-07-26T03:46:39.000Z,8056404654,qwen3,,,,,
-microsoft/Phi-3-mini-4k-instruct,,microsoft,mit,"['en', 'fr']",text-generation,1253210,1301,False,2024-04-22T16:18:17.000Z,2024-09-20T18:09:38.000Z,15284863483,phi3,,,,,
-openai-community/gpt2-large,,openai-community,mit,en,text-generation,1020038,334,False,2022-03-02T23:29:04.000Z,2024-02-19T11:11:02.000Z,22915697059,gpt2,,,,,
-deepseek-ai/DeepSeek-R1-Distill-Llama-8B,8B,deepseek-ai,mit,,text-generation,1010499,812,False,2025-01-20T09:09:42.000Z,2025-02-24T03:32:07.000Z,16060556354,llama,,,,,
-microsoft/phi-4,,microsoft,mit,['en'],text-generation,1005686,2172,False,2024-12-11T11:47:29.000Z,2025-02-24T11:53:58.000Z,29319042992,phi3,,,,,
-Qwen/Qwen3-1.7B,1.7B,Qwen,apache-2.0,,text-generation,991819,277,False,2025-04-27T03:41:05.000Z,2025-07-26T03:46:32.000Z,4074938246,qwen3,,,,,
-Qwen/Qwen2.5-0.5B,0.5B,Qwen,apache-2.0,['en'],text-generation,978674,312,False,2024-09-15T12:15:39.000Z,2024-09-25T12:32:36.000Z,988097824,qwen2,,,,,
-allenai/OLMo-2-0425-1B,1B,allenai,apache-2.0,['en'],text-generation,976621,63,False,2025-04-17T22:45:45.000Z,2025-05-28T20:35:45.000Z,1591836263936,olmo2,,,,,
-mistralai/Mistral-7B-Instruct-v0.2,7B,mistralai,apache-2.0,,text-generation,971394,2975,False,2023-12-11T13:18:44.000Z,2025-07-24T16:57:21.000Z,29496005526,mistral,,,,,
-Qwen/Qwen2.5-32B-Instruct-AWQ,32B,Qwen,apache-2.0,['en'],text-generation,954005,87,False,2024-09-17T13:56:47.000Z,2024-10-09T12:26:37.000Z,19328993904,qwen2,,,,,
-Qwen/Qwen3-14B,14B,Qwen,apache-2.0,,text-generation,949400,289,False,2025-04-27T03:42:45.000Z,2025-07-26T03:49:23.000Z,29548088294,qwen3,,,,,
-HuggingFaceTB/SmolLM2-135M,,HuggingFaceTB,apache-2.0,['en'],text-generation,940739,135,False,2024-10-31T00:46:04.000Z,2025-02-06T10:34:41.000Z,269060552,llama,,,,,
-meta-llama/Meta-Llama-3-8B-Instruct,8B,meta-llama,llama3,['en'],text-generation,917589,4218,manual,2024-04-17T09:35:12.000Z,2025-06-18T23:49:51.000Z,62143070226,llama,,,,,
-meta-llama/Llama-2-7b-chat-hf,7B,meta-llama,llama2,['en'],text-generation,896835,4606,manual,2023-07-13T16:45:23.000Z,2024-04-17T08:40:48.000Z,53908103645,llama,,,,,
-meta-llama/Llama-3.1-70B-Instruct,70B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,834017,853,manual,2024-07-16T16:07:46.000Z,2024-12-15T01:55:33.000Z,282237450046,llama,,,,,
-mlx-community/gpt-oss-20b-MXFP4-Q8,20B,mlx-community,apache-2.0,,text-generation,827168,12,False,2025-08-29T17:57:36.000Z,2025-08-29T17:59:45.000Z,12104075742,gpt_oss,,,,,
-unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit,8B,unsloth,llama3.1,['en'],text-generation,810156,85,False,2024-07-23T16:09:09.000Z,2025-02-15T10:31:16.000Z,5719956303,llama,,,,,
+modelId,model_size,author,license,language,pipeline_tag,downloads,likes,gated,createdAt,lastModified,usedStorage,model_type
+openai-community/gpt2,,openai-community,mit,en,text-generation,9820337,2988,False,2022-03-02T23:29:04.000Z,2024-02-19T10:57:45.000Z,11977009063,gpt2
+google/gemma-3-1b-it,1B,google,gemma,,text-generation,7303960,663,manual,2025-03-10T12:09:00.000Z,2025-04-04T13:12:40.000Z,10671219620,gemma3_text
+Qwen/Qwen3-0.6B,0.6B,Qwen,apache-2.0,,text-generation,7211861,718,False,2025-04-27T03:40:08.000Z,2025-07-26T03:46:27.000Z,4522815806,qwen3
+Qwen/Qwen2.5-7B-Instruct,7B,Qwen,apache-2.0,['en'],text-generation,6393881,823,False,2024-09-16T11:55:40.000Z,2025-01-12T02:10:10.000Z,15231271888,qwen2
+Gensyn/Qwen2.5-0.5B-Instruct,0.5B,Gensyn,apache-2.0,['en'],text-generation,5965047,25,False,2025-03-28T21:57:22.000Z,2025-03-31T13:32:41.000Z,1929574139,qwen2
+Qwen/Qwen3-32B,32B,Qwen,apache-2.0,,text-generation,5963161,553,False,2025-04-27T03:52:59.000Z,2025-07-26T03:45:22.000Z,65535751214,qwen3
+meta-llama/Llama-3.1-8B-Instruct,8B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,5740098,4777,manual,2024-07-18T08:56:00.000Z,2024-09-25T17:00:57.000Z,32123357950,llama
+openai/gpt-oss-20b,20B,openai,apache-2.0,,text-generation,5367913,3736,False,2025-08-04T22:33:29.000Z,2025-08-26T17:25:47.000Z,41321532546,gpt_oss
+trl-internal-testing/tiny-Qwen2ForCausalLM-2.5,,trl-internal-testing,,,text-generation,4916307,1,False,2024-11-25T15:06:15.000Z,2025-09-24T04:53:29.000Z,69779520,qwen2
+Qwen/Qwen3-Next-80B-A3B-Instruct,80B,Qwen,apache-2.0,,text-generation,4887608,826,False,2025-09-09T15:40:56.000Z,2025-09-17T06:57:40.000Z,162670584182,qwen3_next
+dphn/dolphin-2.9.1-yi-1.5-34b,34B,dphn,apache-2.0,,text-generation,4692110,42,False,2024-05-18T04:50:56.000Z,2025-09-08T05:56:56.000Z,68778931137,llama
+meta-llama/Llama-3.2-1B-Instruct,1B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,4688999,1123,manual,2024-09-18T15:12:47.000Z,2024-10-24T15:07:51.000Z,4945506836,llama
+Qwen/Qwen2.5-1.5B-Instruct,1.5B,Qwen,apache-2.0,['en'],text-generation,4583352,525,False,2024-09-17T14:10:29.000Z,2024-09-25T12:32:50.000Z,3087467144,qwen2
+Qwen/Qwen2.5-3B-Instruct,3B,Qwen,other,['en'],text-generation,4479250,320,False,2024-09-17T14:08:52.000Z,2024-09-25T12:33:00.000Z,6171926992,qwen2
+facebook/opt-125m,,facebook,other,en,text-generation,3904993,220,False,2022-05-11T08:25:17.000Z,2023-09-15T13:10:03.000Z,7730636582,opt
+TinyLlama/TinyLlama-1.1B-Chat-v1.0,1.1B,TinyLlama,apache-2.0,['en'],text-generation,3374875,1430,False,2023-12-30T06:27:30.000Z,2024-03-17T05:07:08.000Z,6604219014,llama
+openai/gpt-oss-120b,120B,openai,apache-2.0,,text-generation,3230417,4008,False,2025-08-04T22:33:06.000Z,2025-08-26T17:25:03.000Z,195763884726,gpt_oss
+bigscience/bloomz-560m,,bigscience,bigscience-bloom-rail-1.0,"['ak', 'ar', 'as', 'bm', 'bn', 'ca', 'code', 'en', 'es', 'eu', 'fon', 'fr', 'gu', 'hi', 'id', 'ig', 'ki', 'kn', 'lg', 'ln', 'ml', 'mr', 'ne', 'nso', 'ny', 'or', 'pa', 'pt', 'rn', 'rw', 'sn', 'st', 'sw', 'ta', 'te', 'tn', 'ts', 'tum', 'tw', 'ur', 'vi', 'wo', 'xh', 'yo', 'zh', 'zu']",text-generation,3032845,129,False,2022-10-08T16:14:42.000Z,2023-05-27T17:27:11.000Z,2797455940,bloom
+context-labs/meta-llama-Llama-3.2-3B-Instruct-FP16,3B,context-labs,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,2842641,7,False,2025-02-22T01:43:43.000Z,2025-02-22T04:09:45.000Z,12853298144,llama
+Qwen/Qwen3-4B-Instruct-2507,4B,Qwen,apache-2.0,,text-generation,2561698,401,False,2025-08-05T10:58:03.000Z,2025-09-17T06:56:53.000Z,64383326441,qwen3
+distilbert/distilgpt2,,distilbert,apache-2.0,en,text-generation,2546979,589,False,2022-03-02T23:29:04.000Z,2024-02-19T11:09:53.000Z,8079459096,gpt2
+deepseek-ai/DeepSeek-R1-Distill-Qwen-32B,32B,deepseek-ai,mit,,text-generation,2539010,1457,False,2025-01-20T09:19:00.000Z,2025-02-24T03:31:29.000Z,65527841532,qwen2
+Qwen/Qwen3-8B,8B,Qwen,apache-2.0,,text-generation,2155662,683,False,2025-04-27T03:42:21.000Z,2025-07-26T03:49:13.000Z,16392939430,qwen3
+Qwen/Qwen2.5-7B,7B,Qwen,apache-2.0,['en'],text-generation,2086815,233,False,2024-09-15T12:17:40.000Z,2024-09-25T12:32:32.000Z,15231271888,qwen2
+meta-llama/Llama-3.2-3B-Instruct,3B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,1889728,1767,manual,2024-09-18T15:19:20.000Z,2024-10-24T15:07:29.000Z,12853298144,llama
+petals-team/StableBeluga2,,petals-team,,['en'],text-generation,1822300,20,False,2023-08-12T22:04:01.000Z,2023-08-23T18:00:41.000Z,551815602022,llama
+mistralai/Mistral-7B-Instruct-v0.2,7B,mistralai,apache-2.0,,text-generation,1814483,2985,False,2023-12-11T13:18:44.000Z,2025-07-24T16:57:21.000Z,29496005526,mistral
+RedHatAI/Llama-3.3-70B-Instruct-FP8-dynamic,70B,RedHatAI,llama3.3,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,1718051,11,False,2024-12-11T15:44:06.000Z,2025-09-22T20:28:26.000Z,72687164723,llama
+meta-llama/Meta-Llama-3-8B,8B,meta-llama,llama3,['en'],text-generation,1616215,6347,manual,2024-04-17T09:35:16.000Z,2024-09-27T15:52:33.000Z,48183894272,llama
+Qwen/Qwen3-30B-A3B-Instruct-2507,30B,Qwen,apache-2.0,,text-generation,1592567,624,False,2025-07-28T07:31:27.000Z,2025-09-17T06:56:43.000Z,61079824827,qwen3_moe
+meta-llama/Llama-3.2-1B,1B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,1534970,2117,manual,2024-09-18T15:03:14.000Z,2024-10-24T15:08:03.000Z,5142244878,llama
+Qwen/Qwen2.5-0.5B-Instruct,0.5B,Qwen,apache-2.0,['en'],text-generation,1449052,377,False,2024-09-16T11:52:46.000Z,2024-09-25T12:32:56.000Z,3521294868,qwen2
+Qwen/Qwen3-4B,4B,Qwen,apache-2.0,,text-generation,1440772,416,False,2025-04-27T03:41:29.000Z,2025-07-26T03:46:39.000Z,8056404654,qwen3
+microsoft/Phi-3-mini-4k-instruct,,microsoft,mit,"['en', 'fr']",text-generation,1431830,1311,False,2024-04-22T16:18:17.000Z,2024-09-20T18:09:38.000Z,15284863483,phi3
+Qwen/Qwen2.5-14B-Instruct,14B,Qwen,apache-2.0,['en'],text-generation,1404138,276,False,2024-09-16T11:56:10.000Z,2024-09-25T12:33:04.000Z,29540134000,qwen2
+Qwen/Qwen3-Next-80B-A3B-Thinking,80B,Qwen,apache-2.0,,text-generation,1317760,429,False,2025-09-09T15:45:31.000Z,2025-09-15T09:12:48.000Z,162670584182,qwen3_next
+inference-net/Schematron-3B,3B,inference-net,llama3.2,,text-generation,1177427,47,False,2025-08-21T19:15:21.000Z,2025-09-09T08:30:16.000Z,6442934619,llama
+allenai/OLMo-2-0425-1B,1B,allenai,apache-2.0,['en'],text-generation,1167115,64,False,2025-04-17T22:45:45.000Z,2025-05-28T20:35:45.000Z,1591836263936,olmo2
+Qwen/Qwen3-1.7B,1.7B,Qwen,apache-2.0,,text-generation,1138135,289,False,2025-04-27T03:41:05.000Z,2025-07-26T03:46:32.000Z,4074938246,qwen3
+unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit,8B,unsloth,llama3.1,['en'],text-generation,991289,85,False,2024-07-23T16:09:09.000Z,2025-02-15T10:31:16.000Z,5719956303,llama
+meta-llama/Meta-Llama-3-8B-Instruct,8B,meta-llama,llama3,['en'],text-generation,968056,4228,manual,2024-04-17T09:35:12.000Z,2025-06-18T23:49:51.000Z,62143070226,llama
+meta-llama/Llama-2-7b-hf,7B,meta-llama,llama2,['en'],text-generation,907416,2168,manual,2023-07-13T16:16:13.000Z,2024-04-17T08:40:16.000Z,53909360564,llama
+Qwen/Qwen2.5-32B-Instruct-AWQ,32B,Qwen,apache-2.0,['en'],text-generation,904730,87,False,2024-09-17T13:56:47.000Z,2024-10-09T12:26:37.000Z,19328993904,qwen2
+Qwen/Qwen2.5-0.5B,0.5B,Qwen,apache-2.0,['en'],text-generation,898240,314,False,2024-09-15T12:15:39.000Z,2024-09-25T12:32:36.000Z,988097824,qwen2
+microsoft/phi-4,,microsoft,mit,['en'],text-generation,883439,2176,False,2024-12-11T11:47:29.000Z,2025-02-24T11:53:58.000Z,29319042992,phi3
+KomeijiForce/bart-large-emojilm,,KomeijiForce,,['en'],text-generation,873022,0,False,2023-11-06T02:18:38.000Z,2023-11-10T22:21:05.000Z,3269238401,bart
+openai-community/gpt2-large,,openai-community,mit,en,text-generation,849828,334,False,2022-03-02T23:29:04.000Z,2024-02-19T11:11:02.000Z,22915697059,gpt2
+meta-llama/Llama-3.1-70B-Instruct,70B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,822108,854,manual,2024-07-16T16:07:46.000Z,2024-12-15T01:55:33.000Z,282237450046,llama
+mlx-community/gpt-oss-20b-MXFP4-Q8,20B,mlx-community,apache-2.0,,text-generation,802704,13,False,2025-08-29T17:57:36.000Z,2025-08-29T17:59:45.000Z,12104075742,gpt_oss
+meta-llama/Llama-3.1-405B-Instruct,405B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,795651,582,manual,2024-07-16T18:24:44.000Z,2024-09-25T17:02:11.000Z,3035854528726,llama
+Qwen/Qwen3-14B,14B,Qwen,apache-2.0,,text-generation,761245,291,False,2025-04-27T03:42:45.000Z,2025-07-26T03:49:23.000Z,29548088294,qwen3
+deepseek-ai/DeepSeek-R1-Distill-Llama-8B,8B,deepseek-ai,mit,,text-generation,748701,815,False,2025-01-20T09:09:42.000Z,2025-02-24T03:32:07.000Z,16060556354,llama
+meta-llama/Meta-Llama-3-70B-Instruct,70B,meta-llama,llama3,['en'],text-generation,748075,1493,manual,2024-04-17T09:34:54.000Z,2025-06-18T23:49:26.000Z,282237450046,llama
+meta-llama/Llama-2-7b-chat-hf,7B,meta-llama,llama2,['en'],text-generation,736634,4615,manual,2023-07-13T16:45:23.000Z,2024-04-17T08:40:48.000Z,53908103645,llama
+meta-llama/Llama-3.3-70B-Instruct,70B,meta-llama,llama3.3,"['en', 'fr', 'it', 'pt', 'hi', 'es', 'th', 'de']",text-generation,712399,2537,manual,2024-11-26T16:08:47.000Z,2024-12-21T18:28:01.000Z,282254659966,llama
+deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B,1.5B,deepseek-ai,mit,,text-generation,679870,1360,False,2025-01-20T09:04:18.000Z,2025-02-24T03:32:35.000Z,3555721410,qwen2
+microsoft/phi-2,,microsoft,mit,['en'],text-generation,662363,3399,False,2023-12-13T21:19:59.000Z,2024-04-29T16:25:56.000Z,11125567216,phi
+Qwen/Qwen3-Coder-30B-A3B-Instruct,30B,Qwen,apache-2.0,,text-generation,645216,692,False,2025-07-31T07:04:55.000Z,2025-08-21T10:18:32.000Z,61066575656,qwen3_moe
+unsloth/Meta-Llama-3.1-8B-Instruct,8B,unsloth,llama3.1,['en'],text-generation,642259,88,False,2024-07-23T16:24:05.000Z,2025-02-15T10:24:46.000Z,16077766296,llama
+Qwen/Qwen3-32B-AWQ,32B,Qwen,apache-2.0,,text-generation,622449,110,False,2025-05-01T10:38:33.000Z,2025-05-21T06:17:51.000Z,19336904398,qwen3
+codellama/CodeLlama-34b-hf,34B,codellama,llama2,['code'],text-generation,621412,176,False,2023-08-24T16:34:39.000Z,2024-04-12T14:16:52.000Z,135238724250,llama
+google/gemma-2-2b-it,2B,google,gemma,,text-generation,618455,1203,manual,2024-07-16T10:51:39.000Z,2024-08-27T19:41:44.000Z,5288159306,gemma2
+Qwen/Qwen2.5-32B-Instruct,32B,Qwen,apache-2.0,['en'],text-generation,615588,302,False,2024-09-17T04:17:55.000Z,2024-09-25T12:33:09.000Z,65527841856,qwen2
+microsoft/DialoGPT-medium,,microsoft,mit,,text-generation,613488,420,False,2022-03-02T23:29:05.000Z,2024-02-29T15:48:54.000Z,7919339951,gpt2
+deepseek-ai/DeepSeek-R1-Distill-Qwen-7B,7B,deepseek-ai,mit,,text-generation,603190,729,False,2025-01-20T09:16:14.000Z,2025-02-24T03:32:20.000Z,15231404337,qwen2
+HuggingFaceTB/SmolLM2-135M,,HuggingFaceTB,apache-2.0,['en'],text-generation,584244,135,False,2024-10-31T00:46:04.000Z,2025-02-06T10:34:41.000Z,269060552,llama
+meta-llama/Llama-3.1-8B,8B,meta-llama,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,549269,1868,manual,2024-07-14T22:20:15.000Z,2024-10-16T22:00:37.000Z,32350119302,llama
+deepseek-ai/DeepSeek-V3.1,,deepseek-ai,mit,,text-generation,540717,785,False,2025-08-21T02:37:52.000Z,2025-09-05T11:30:15.000Z,688595361908,deepseek_v3
+meta-llama/Llama-Guard-3-1B,1B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,540575,90,manual,2024-09-20T16:04:40.000Z,2024-09-26T21:23:14.000Z,8467822122,llama
+deepseek-ai/DeepSeek-R1-0528,,deepseek-ai,mit,,text-generation,521689,2380,False,2025-05-28T09:46:42.000Z,2025-05-29T11:37:44.000Z,688588119234,deepseek_v3
+deepseek-ai/DeepSeek-R1,,deepseek-ai,mit,,text-generation,518191,12788,False,2025-01-20T03:46:07.000Z,2025-03-27T04:01:59.000Z,688624501744,deepseek_v3
+kaitchup/Phi-3-mini-4k-instruct-gptq-4bit,4B,kaitchup,,,text-generation,509265,2,False,2024-04-25T06:48:14.000Z,2024-04-25T06:49:29.000Z,2281959203,phi3
+Qwen/Qwen2.5-7B-Instruct-AWQ,7B,Qwen,apache-2.0,['en'],text-generation,479638,29,False,2024-09-17T13:55:09.000Z,2024-10-09T12:26:45.000Z,5570829760,qwen2
+Qwen/Qwen3-8B-Base,8B,Qwen,apache-2.0,,text-generation,476220,61,False,2025-04-28T05:03:58.000Z,2025-05-21T05:59:01.000Z,16381516776,qwen3
+Qwen/Qwen2-0.5B,0.5B,Qwen,apache-2.0,['en'],text-generation,474659,154,False,2024-05-31T08:38:11.000Z,2024-10-22T13:47:30.000Z,7342283550,qwen2
+unsloth/Qwen3-30B-A3B-GGUF,30B,unsloth,apache-2.0,['en'],text-generation,450507,255,False,2025-04-28T13:48:41.000Z,2025-06-08T08:10:02.000Z,2656278224772,qwen3_moe
+HuggingFaceTB/SmolLM-135M,,HuggingFaceTB,apache-2.0,['en'],text-generation,428973,229,False,2024-07-14T21:45:18.000Z,2024-08-01T20:12:34.000Z,1973556477,llama
+lmstudio-community/Qwen3-4B-Thinking-2507-MLX-4bit,4B,lmstudio-community,apache-2.0,,text-generation,422877,9,False,2025-08-06T15:21:28.000Z,2025-08-06T15:22:07.000Z,2274445183,qwen3
+lmstudio-community/Qwen3-4B-Thinking-2507-MLX-8bit,4B,lmstudio-community,apache-2.0,,text-generation,414385,7,False,2025-08-06T15:24:43.000Z,2025-08-06T15:25:32.000Z,4285581641,qwen3
+lmstudio-community/Qwen3-4B-Thinking-2507-MLX-6bit,4B,lmstudio-community,apache-2.0,,text-generation,412863,2,False,2025-08-06T15:23:42.000Z,2025-08-06T15:24:17.000Z,3280013453,qwen3
+apple/OpenELM-1_1B-Instruct,1B,apple,apple-amlr,,text-generation,412063,67,False,2024-04-12T21:52:12.000Z,2025-02-28T18:31:24.000Z,2159808696,openelm
+meta-llama/Llama-3.2-3B,3B,meta-llama,llama3.2,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,410250,644,manual,2024-09-18T15:23:48.000Z,2024-10-24T15:07:40.000Z,12853731547,llama
+LiquidAI/LFM2-1.2B,1.2B,LiquidAI,other,"['en', 'ar', 'zh', 'fr', 'de', 'ja', 'ko', 'es']",text-generation,407035,314,False,2025-07-10T12:01:50.000Z,2025-09-23T14:49:12.000Z,2340697936,lfm2
+IlyaGusev/saiga_llama3_8b,8B,IlyaGusev,other,['ru'],text-generation,403779,129,False,2024-04-18T18:25:25.000Z,2024-07-04T07:34:28.000Z,112451149269,llama
+unsloth/mistral-7b-v0.3-bnb-4bit,7B,unsloth,apache-2.0,['en'],text-generation,397485,20,False,2024-05-22T18:13:59.000Z,2024-11-22T08:30:49.000Z,4138858225,mistral
+xihc-ucb/Qwen3-8B-train-Quasar-0809,8B,xihc-ucb,,,text-generation,397071,0,False,2025-08-10T01:54:06.000Z,2025-08-20T01:52:14.000Z,16392939406,fp8_qwen3
+Qwen/Qwen3-30B-A3B,30B,Qwen,apache-2.0,,text-generation,396486,797,False,2025-04-27T03:43:05.000Z,2025-07-26T03:45:17.000Z,61077998302,qwen3_moe
+microsoft/DialoGPT-small,,microsoft,mit,,text-generation,394727,140,False,2022-03-02T23:29:05.000Z,2024-02-29T15:48:41.000Z,4364774105,gpt2
+meta-llama/Llama-Guard-3-8B,8B,meta-llama,llama3.1,['en'],text-generation,392040,237,manual,2024-07-22T08:10:45.000Z,2024-10-11T14:52:47.000Z,32123303704,llama
+dicta-il/dictalm2.0-instruct,,dicta-il,apache-2.0,"['en', 'he']",text-generation,389989,24,False,2024-04-14T02:35:16.000Z,2024-07-10T16:09:58.000Z,14502885120,mistral
+kosbu/Llama-3.3-70B-Instruct-AWQ,70B,kosbu,llama3.3,"['en', 'fr', 'it', 'pt', 'hi', 'es', 'th', 'de']",text-generation,389812,6,False,2024-12-06T19:42:08.000Z,2024-12-07T06:10:11.000Z,39785206176,llama
+unsloth/gpt-oss-20b-BF16,20B,unsloth,apache-2.0,,text-generation,388212,24,False,2025-08-05T17:44:50.000Z,2025-08-05T22:00:47.000Z,41857429502,gpt_oss
+hugging-quants/Meta-Llama-3.1-70B-Instruct-AWQ-INT4,70B,hugging-quants,llama3.1,"['en', 'de', 'fr', 'it', 'pt', 'hi', 'es', 'th']",text-generation,382654,105,False,2024-07-19T11:08:55.000Z,2024-08-07T07:16:54.000Z,39767996256,llama
+Qwen/Qwen2-1.5B-Instruct,1.5B,Qwen,apache-2.0,['en'],text-generation,381489,151,False,2024-06-03T09:08:12.000Z,2024-06-06T14:36:57.000Z,20279235336,qwen2
+zai-org/GLM-4.5-Air,,zai-org,mit,"['en', 'zh']",text-generation,376298,486,False,2025-07-20T03:25:55.000Z,2025-08-11T13:25:37.000Z,220959914155,glm4_moe
+trl-internal-testing/tiny-random-LlamaForCausalLM,,trl-internal-testing,,,text-generation,370844,7,False,2023-03-29T07:11:13.000Z,2024-04-23T12:12:07.000Z,8767545,llama
+Qwen/Qwen3-14B-Base,14B,Qwen,apache-2.0,,text-generation,368608,34,False,2025-04-28T05:07:11.000Z,2025-07-26T03:45:33.000Z,29536665640,qwen3
+mistralai/Mistral-7B-v0.1,7B,mistralai,apache-2.0,['en'],text-generation,363814,3990,False,2023-09-20T13:03:50.000Z,2025-07-24T16:44:02.000Z,44007786287,mistral
+ibm-research/PowerMoE-3b,3B,ibm-research,apache-2.0,,text-generation,361944,13,False,2024-08-14T18:44:21.000Z,2024-09-24T22:04:31.000Z,20094793448,granitemoe
+Qwen/Qwen2.5-Coder-1.5B,1.5B,Qwen,apache-2.0,['en'],text-generation,360596,65,False,2024-09-18T09:41:38.000Z,2024-11-18T12:53:05.000Z,3510501485,qwen2
