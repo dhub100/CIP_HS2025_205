@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup as bs
 import mechanicalsoup as ms
 import re
 import time
+import selenium
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -124,13 +125,14 @@ models = hf_meta.modelId.values
 # The first step will be to already write the columns name inside the csv file.
 
 # %%
-driver = webdriver.Safari()
-url = "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
-driver.get(url)
-time.sleep(2)
-iframe = driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
-driver.switch_to.frame(iframe)
-with open("hf_leaderboard.csv", "w") as f:
+with open("hff_leaderboard.csv", "w") as f:
+    driver = webdriver.Safari()
+    time.sleep(5)
+    url = "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
+    driver.get(url)
+    time.sleep(5)
+    iframe = driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
+    driver.switch_to.frame(iframe)
     table = driver.find_element(By.TAG_NAME, "table")
     thead = table.find_element(By.TAG_NAME, "thead")
     colnames = [
@@ -140,6 +142,7 @@ with open("hf_leaderboard.csv", "w") as f:
     # Write columns or variable names
     colnames.append("\n")
     f.write(",".join(colnames[1:]))
+    driver.close()
 
 # %% [markdown]
 # Now that we have the column names written, we can append the rest of the rows to it.
@@ -149,7 +152,7 @@ with open("hf_leaderboard.csv", "w") as f:
 # Additionnaly, it is necessary to let the driver time to open and scrape things. Hence incorporating waiting time is of uptmost importance, otherwise it fails.
 
 # %%
-with open("hf_leaderboard.csv", "a") as f:
+with open("hff_leaderboard.csv", "a") as f:
     for model in models:
         driver = webdriver.Safari()
         time.sleep(5)
@@ -229,3 +232,115 @@ new_models = hf_long_meta.loc[np.invert(hf_long_meta.modelId.isin(models).values
 
 # %%
 hf_scrape(new_models.modelId.values)
+
+# %% [markdown]
+# Let's build a new class for reusability and cleanliness.
+
+
+# %%
+class HFLeaderboardScraper:
+    def __init__(self, browser="safari", wait_time=5):
+        """
+        Initialize HuggingFace Leaderboard scraper with browser preference.
+
+        Args:
+            browser: Browser choice - "chrome", "firefox", "safari", or "edge"
+            wait_time: Maximum wait time for elements in seconds
+            headless: Run browser in headless mode (not supported for Safari)
+        """
+        self.browser = browser.lower()
+        self.wait_time = wait_time
+        self.base_url = (
+            "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
+        )
+        self.driver = None
+
+    def _get_driver(self):
+        """
+        Create and return WebDriver instance based on browser preference.
+        """
+        if self.browser == "chrome":
+            return selenium.webdriver.Chrome()
+        elif self.browser == "firefox":
+            return selenium.webdriver.Firefox()
+        elif self.browser == "safari":
+            return selenium.webdriver.Safari()
+        elif self.browser == "edge":
+            return selenium.webdriver.Edge()
+        else:
+            raise ValueError(
+                f"Unsupported browser: {self.browser}. Choose from 'chrome', 'firefox', 'safari', or 'edge'"
+            )
+
+    def _initialize_driver(self):
+        """
+        Initialize WebDriver
+        """
+        self.driver = self._get_driver()
+        time.sleep(5)
+
+    def scrape_header(self, to_file):
+        """
+        Scrape for the headers of the table.
+        """
+        with open(to_file, "a") as f:
+            self._initialize_driver()
+            self.driver.get(self.base_url)
+            time.sleep(5)
+            iframe = self.driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
+            self.driver.switch_to.frame(iframe)
+            table = self.driver.find_element(By.TAG_NAME, "table")
+            thead = table.find_element(By.TAG_NAME, "thead")
+            colnames = [
+                th.find_element(By.TAG_NAME, "p").text
+                for th in thead.find_elements(By.TAG_NAME, "th")
+            ]
+            # Write columns or variable names
+            colnames.append("\n")
+            f.write(",".join(colnames[1:]))
+            self.driver.close()
+
+    def scrape_models(
+        self,
+        models: list[str],
+        to_file: str = "fh_leaderboard.csv",
+        write_header=False,
+    ):
+        """
+        Scrape HuggingFace leaderboard data for a list of models.
+
+        Args:
+            models: List of model names to scrape
+            to_file: Output CSV file path
+            write_header: If True, write column headers before data
+        """
+        with open(to_file, "a") as f:
+            if write_header:
+                self.scrape_header(to_file)
+            for model in models:
+                self._initialize_driver()
+                # Open the webpage with the filter
+                self.driver.get(self.base_url + f"?search={model}")
+                time.sleep(5)
+                # Switch to the corresponding iFrame on the webpage
+                iframe = self.driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
+                self.driver.switch_to.frame(iframe)
+                # Check for unavailable model on the website
+                try:
+                    # Get the table element
+                    table = self.driver.find_element(By.TAG_NAME, "table")
+                except NoSuchElementException:
+                    driver.close()
+                    continue
+                # Get the body element
+                tbody = table.find_element(By.TAG_NAME, "tbody")
+                # Get the first row, so the first model appearing in the search
+                row = tbody.find_element(By.TAG_NAME, "tr")
+                # Get all the information from the row
+                obs = [p.text for p in row.find_elements(By.TAG_NAME, "p")]
+                # Make sure to also get the model name, which is a link
+                obs.insert(2, row.find_element(By.TAG_NAME, "a").text)
+                # Write everything inside the CSV file as a new row.
+                obs.append("\n")
+                f.write(",".join(obs))
+                self.driver.close()
