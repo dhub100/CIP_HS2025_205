@@ -80,7 +80,7 @@ df["model_size"] = df["modelId"].apply(api.extract_model_size)
 df.to_csv("huggingface_llm_metadata.csv", index=False)
 
 # read csv and show duplicates based on modelId
+# df = pd.read_csv("huggingface_100_llm_metadata.csv")
 
-df = pd.read_csv("huggingface_100_llm_metadata.csv")
 duplicates = df[df.duplicated(subset=["modelId"], keep=False)]
 print("Duplicates based on modelId:")
