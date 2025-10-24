@@ -53,6 +53,7 @@ Note:
     Models not found on the leaderboard will be skipped with a message.
 """
 
+import time
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
@@ -178,7 +179,7 @@ class HFLeaderboardScraper:
                     table = self.driver.find_element(By.TAG_NAME, "table")
                 except NoSuchElementException:
                     # Model not found on leaderboard - close browser and skip
-                    driver.close()
+                    self.driver.close()
                     continue
                 # Get table body containing the data rows
                 tbody = table.find_element(By.TAG_NAME, "tbody")
