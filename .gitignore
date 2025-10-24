@@ -5,3 +5,5 @@ __pycache__/
 *.pyo
 *.pyd
 .Python
+huggingface_llm_metadata.xlsx
+top_llms.txt
