@@ -1,6 +1,5 @@
 ---
-title: "Feasibility Study – Evaluating and Comparing Large Language Models (LLMs)
-"
+title: "Feasibility Study – Evaluating and Comparing Large Language Models (LLMs)"
 format: html
 ---
 
