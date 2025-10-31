@@ -14,11 +14,6 @@ This part of the project was implemented by Robin Girardin.
 
 ### How it works
 
--   The scraper searches for specific models on the HuggingFace leaderboard by name.
--   For each model, it extracts the first matching result from the leaderboard table.
--   Data is appended to a CSV file, preserving any existing content.
--   Models not found on the leaderboard are automatically skipped.
-
 This class-based scraper extracts benchmark data for LLM models from the [HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/).
 It starts by extracting the column names of the leaderboard table and then searches for specific models by filtering the table by model name.
 If a corresponding model is found, it extracts the first matching result from the leaderboard table, otherwise the model is skipped.
