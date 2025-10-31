@@ -73,12 +73,10 @@ class HuggingFaceAPI:
         return match.group(1) + "B" if match else None
 
 
-api = HuggingFaceAPI()
-models = api.get_top_models(limit=100)
-df = api.get_model_metadata(models)
-df["model_size"] = df["modelId"].apply(api.extract_model_size)
+if __name__ == "__main__":
+    api = HuggingFaceAPI()
+    models = api.get_top_models(limit=100)
+    df = api.get_model_metadata(models)
+    df["model_size"] = df["modelId"].apply(api.extract_model_size)
+    df.to_csv("huggingface_100_llm_metadata.csv", index=False)
 
-# duplicates = df[df.duplicated(subset=["modelId"], keep=False)]
-# print("Duplicates based on modelId:")
-
-df.to_csv("huggingface_100_llm_metadata.csv", index=False)
