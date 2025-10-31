@@ -57,7 +57,13 @@ The collected benchmark data is stored in the specified CSV file (default: `hf_l
 
 This section was implemented by Alin Sever.
 
-TBD TBD TBD TBD
+The data preparation involved cleaning and joining the two complementary datasets extracted via API and webscrapping . Both datasets were first inspected forduplicates and missing values to enure the intergrity.
+Datasets were checked for duplicate row. Model names were than standardized by aplying the test cleaning fuction that unified the model names in the both datasets (preparing data for merging). Redundant columns such 'language', 'pipelin_tag' that contained irrelevant and respectively irrelevant values, were removed. Time variables were reformated into standardized formats.
+
+The dataset were merged using an 'inner join' on the variable model. Missing mode_size values were retrieved through targeted web scrapping from the respective HuggingFace model pages using BeautifulSoup and regular expressions. Model_size variable was converted to bilions of parameters for consistency. Benchmark percentaged and CO₂ indicator were cleaned and transformed into int to allow analysis. Finally categorical symbold representing model types (🟢, 💬, 🔶) were mapped to string label. 
+
+The fully cleaned and joined dataset was saved as df_joned_clean.pkl for exporation and vizualisation.
+
 
 ## Data analysis and visualization
 
