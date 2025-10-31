@@ -4,7 +4,37 @@
 
 This part of the project was implemented by Daniel Huber.
 
-It consists of a Python script that connects to the Hugging Face API to retrieve and process metadata from the most downloaded language models. The script is structured as a class (HuggingFaceAPI) that handles authentication via a secure token from a .env file, fetches model data, extracts key attributes such as author, license, and model size, and saves the collected information in a CSV file. This dataset serves as the basis for further enrichment through a complementary web-scraping script developed by a project colleague.
+### How it works
+
+This Python script connects to the Hugging Face API to retrieve metadata from the most downloaded Large Language Models (LLMs). The script is organized as a class (`HuggingFaceAPI`) that manages authentication via a secure token stored in a `.env` file, fetches model lists and detailed metadata, and processes the results into a structured `pandas` DataFrame.
+
+Key model attributes such as author, license, language, and model size are extracted and exported to a CSV file `huggingface_100_llm_metadata.csv`). This dataset serves as the foundation for further enrichment through web scraping and analysis in later project stages.
+
+### Requirements
+
+-   A valid Hugging Face API token stored in a `.env` file under the variable `HF_TOKEN`
+-   Python 3.10+
+-   Required packages:
+
+``` bash
+pip install requests pandas python-dotenv
+```
+
+### Usage
+
+``` python
+from API_script_Dani import HuggingFaceAPI
+
+api = HuggingFaceAPI()
+models = api.get_top_models(limit=100)
+df = api.get_model_metadata(models)
+df["model_size"] = df["modelId"].apply(api.extract_model_size)
+df.to_csv("huggingface_100_llm_metadata.csv", index=False)
+```
+
+### Output
+
+The script generates a CSV file (`huggingface_100_llm_metadata.csv`) containing metadata for the top 100 downloaded text-generation models on Hugging Face.
 
 ------------------------------------------------------------------------
 
@@ -14,10 +44,7 @@ This part of the project was implemented by Robin Girardin.
 
 ### How it works
 
-This class-based scraper extracts benchmark data for LLM models from the [HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/).
-It starts by extracting the column names of the leaderboard table and then searches for specific models by filtering the table by model name.
-If a corresponding model is found, it extracts the first matching result from the leaderboard table, otherwise the model is skipped.
-All scraped information are appended incrementally to a dedicated `.csv` file (default: `hf_leaderboard.csv`), as to not lose any information in case of runtime issues.
+This class-based scraper extracts benchmark data for LLM models from the [HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/). It starts by extracting the column names of the leaderboard table and then searches for specific models by filtering the table by model name. If a corresponding model is found, it extracts the first matching result from the leaderboard table, otherwise the model is skipped. All scraped information are appended incrementally to a dedicated `.csv` file (default: `hf_leaderboard.csv`), as to not lose any information in case of runtime issues.
 
 ### Setup
 
