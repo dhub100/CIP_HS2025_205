@@ -1,62 +1,41 @@
 # Hugging Face LLM Metadata Extractor
 
-This script downloads metadata for the most popular LLM models from Hugging Face and saves it as a CSV file.
+## API Component
 
-## Setup
+This part of the project was implemented by Daniel Huber.
 
-### **Hugging Face Token:**
-   Create a `.env` file in the project directory and enter your personal Hugging Face access token there:
-```
-   HF_TOKEN=your_token_here
-   ```
-   Each collaborator must store their own token.
+It consists of a Python script that connects to the Hugging Face API to retrieve and process metadata from the most downloaded language models. The script is structured as a class (HuggingFaceAPI) that handles authentication via a secure token from a .env file, fetches model data, extracts key attributes such as author, license, and model size, and saves the collected information in a CSV file. This dataset serves as the basis for further enrichment through a complementary web-scraping script developed by a project colleague.
 
-### **Dependencies:**
-   Install the required Python packages:
-   ```
-   pip install requests pandas python-dotenv re
-   ```
+------------------------------------------------------------------------
 
-## How it works
+## Webscraper Component
 
-- The script loads the top models and extracts available metadata.
-- Some columns (e.g., performance, cost, ranking) are initially empty and will be filled in later via web scraping.
+This part of the project was implemented by Robin Girardin.
 
-## Result
-
-The collected data is stored in the file `huggingface_llm_metadata.csv`.
-
----
-
-# HuggingFace Open Leaderboard Scraper
+TBD TBD TBD TBD
 
 This class-based scraper extracts benchmark data for LLM models from the HuggingFace Open Leaderboard and saves it as a CSV file.
 
 ## Setup
 
 ### **Browser Driver:**
-   Install the appropriate browser driver for your system:
-   - **Chrome:** [chromedriver](https://chromedriver.chromium.org/)
-   - **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases)
-   - **Safari:** Pre-installed on macOS (no setup needed)
-   - **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
+
+Install the appropriate browser driver for your system: - **Chrome:** [chromedriver](https://chromedriver.chromium.org/) - **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases) - **Safari:** Pre-installed on macOS (no setup needed) - **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
 
 ### **Dependencies:**
-   Install the required Python packages:
-   ```bash
-   pip install selenium
-   ```
+
+Install the required Python packages: `bash    pip install selenium`
 
 ## How it works
 
-- The scraper searches for specific models on the HuggingFace leaderboard by name.
-- For each model, it extracts the first matching result from the leaderboard table.
-- Data is appended to a CSV file, preserving any existing content.
-- Models not found on the leaderboard are automatically skipped.
+-   The scraper searches for specific models on the HuggingFace leaderboard by name.
+-   For each model, it extracts the first matching result from the leaderboard table.
+-   Data is appended to a CSV file, preserving any existing content.
+-   Models not found on the leaderboard are automatically skipped.
 
 ## Usage
 
-```python
+``` python
 from hf_scrape import HFLeaderboardScraper
 
 # Create scraper instance
@@ -76,3 +55,15 @@ scraper.scrape_models(more_models, to_file="output.csv", write_header=False)
 ## Result
 
 The collected benchmark data is stored in the specified CSV file (default: `fh_leaderboard.csv`).
+
+## Data preparation
+
+This section was implemented by Alin Sever.
+
+TBD TBD TBD TBD
+
+## Data analysis and visualization
+
+This section was developed by Alin Sever and finalized with support of Robin and Daniel.
+
+TBD TBD TBD TBD
