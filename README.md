@@ -12,28 +12,29 @@ It consists of a Python script that connects to the Hugging Face API to retrieve
 
 This part of the project was implemented by Robin Girardin.
 
-TBD TBD TBD TBD
-
-This class-based scraper extracts benchmark data for LLM models from the HuggingFace Open Leaderboard and saves it as a CSV file.
-
-## Setup
-
-### **Browser Driver:**
-
-Install the appropriate browser driver for your system: - **Chrome:** [chromedriver](https://chromedriver.chromium.org/) - **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases) - **Safari:** Pre-installed on macOS (no setup needed) - **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
-
-### **Dependencies:**
-
-Install the required Python packages: `bash    pip install selenium`
-
-## How it works
+### How it works
 
 -   The scraper searches for specific models on the HuggingFace leaderboard by name.
 -   For each model, it extracts the first matching result from the leaderboard table.
 -   Data is appended to a CSV file, preserving any existing content.
 -   Models not found on the leaderboard are automatically skipped.
 
-## Usage
+This class-based scraper extracts benchmark data for LLM models from the [HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/).
+It starts by extracting the column names of the leaderboard table and then searches for specific models by filtering the table by model name.
+If a corresponding model is found, it extracts the first matching result from the leaderboard table, otherwise the model is skipped.
+All scraped information are appended incrementally to a dedicated `.csv` file (default: `hf_leaderboard.csv`), as to not lose any information in case of runtime issues.
+
+### Setup
+
+#### **Browser Driver:**
+
+Install the appropriate browser driver for your system: - **Chrome:** [chromedriver](https://chromedriver.chromium.org/) - **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases) - **Safari:** Pre-installed on macOS (no setup needed) - **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
+
+#### **Dependencies:**
+
+Install the required Python packages: `bash    pip install selenium`
+
+### Usage
 
 ``` python
 from hf_scrape import HFLeaderboardScraper
@@ -52,9 +53,9 @@ more_models = ["google/gemma-7b"]
 scraper.scrape_models(more_models, to_file="output.csv", write_header=False)
 ```
 
-## Result
+### Output
 
-The collected benchmark data is stored in the specified CSV file (default: `fh_leaderboard.csv`).
+The collected benchmark data is stored in the specified CSV file (default: `hf_leaderboard.csv`).
 
 ## Data preparation
 
