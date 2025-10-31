@@ -1,0 +1,27 @@
+---
+title: "Methods: Scraping"
+format: html
+---
+
+### Scraping
+
+#### Exploration and Technical Challenges
+The HuggingFace Open Leaderboard presents benchmark data in a dynamic table embedded within an iframe. Initial exploration revealed that the
+table displays only 28 models by default, requiring either scrolling or search filtering to access additional entries. Since automated scrolling
+proved unreliable, the solution adopted URL-based filtering via `?search=[model_name]` parameters.
+
+#### Implementation and Structure
+The final implementation uses a `HFLeaderboardScraper` class built with Selenium, supporting multiple browsers (Chrome, Firefox, Safari, Edge).
+The scraper navigates the DOM hierarchy systematically: locating the iframe, switching context, and extracting data from standard HTML table
+elements (`<thead>`, `<tbody>`, `<tr>`, `<p>`). Model names, stored as links (`<a>` tags), require separate extraction and insertion at the
+correct position.
+
+Two key methods handle the scraping process: `scrape_header()` extracts column names once and writes them to CSV, while `scrape_models()`
+iterates through a model list, filtering the leaderboard for each entry and extracting the top search result. To ensure reliability, the driver
+reinitializes for each model and includes `time.sleep()` delays for complete page loading—a pragmatic solution that prioritizes stability over
+speed.
+
+#### Output and Integration
+Data is appended to CSV incrementally during scraping, preventing data loss from runtime errors. Models without benchmark data are automatically
+skipped, though some duplicates occur when similar model variants appear in search results. The resulting dataset shares a common identifier
+(`Model`/`modelId`) with the API-collected metadata, enabling straightforward merging for downstream analysis.

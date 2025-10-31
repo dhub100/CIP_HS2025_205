@@ -1,0 +1,15 @@
+---
+title: "Methods: API"
+format: html
+---
+
+### API
+
+#### Exploration and API Understanding  
+To develop the final script for retrieving data from the Hugging Face API, the process began with an in-depth exploration of the API documentation and its endpoints. The focus was on understanding how to access and interpret the metadata of individual models, which required analyzing the complex, multi-layered JSON responses. This investigation made it possible to identify key fields such as author, license, model type, download counts, likes and timestamps.  
+
+#### Implementation and Structure  
+Building on these insights, the script was implemented step by step and later refactored into a clean and modular Python class named `HuggingFaceAPI`. The class loads an authentication token from a `.env` file using the `dotenv` package, ensuring safe access to the API. The method `get_top_models()` retrieves the most downloaded models for a given pipeline tag (e.g., *text-generation*) and stores their IDs locally. The method `get_model_metadata()` then iterates through these IDs to collect comprehensive metadata, which is stored in a structured pandas DataFrame. A static method, `extract_model_size()`, applies a regular expression to parse model names and extract approximate model sizes (e.g., “7B”, “13B”).  
+
+#### Output and Integration  
+The collected and processed data is finally saved as a CSV file (`huggingface_llm_metadata.csv`). This file serves as a foundational dataset that will be enriched with information regarding the performance of the models that needs to be scraped from the web. The resulting class-based design ensures the API script remains modular, reusable, and easy to extend, providing a reliable basis for automated large-scale metadata collection from Hugging Face.  
