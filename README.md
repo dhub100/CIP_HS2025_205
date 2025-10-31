@@ -37,8 +37,9 @@ from hf_scrape import HFLeaderboardScraper
 # Create scraper instance
 scraper = HFLeaderboardScraper(browser="safari", wait_time=5)
 
-# Define models to scrape
-models = ["mistralai/Mistral-7B-v0.1", "meta-llama/Llama-2-7b"]
+# Define models to scrape, by loading the API data collected.
+api_data = pd.read_csv("hf_metadata_100_leaderboard.csv")
+models = api_data.modelId.values
 
 # Scrape models and write to CSV (with headers on first run)
 scraper.scrape_models(models, to_file="output.csv", write_header=True)
