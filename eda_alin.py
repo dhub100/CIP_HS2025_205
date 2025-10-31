@@ -7,24 +7,25 @@ from matplotlib.ticker import PercentFormatter
 
 df_all = pd.read_csv("huggingface_llm_metadata.csv")
 #df_100 = pd.read_csv("huggingface_100_llm_metadata.csv")
-df_lb = pd.read_csv("hf_leaderboard.csv")
+df_lb = pd.read_csv("hf_scraped.csv")
 
-df_all.duplicated().sum()
-df_lb.duplicated().sum()
+print(df_all.duplicated().sum())
+print(df_lb.duplicated().sum())
 
 
-# df_lb has duplicate rows
-duplicates=df_lb[df_lb.duplicated(keep=False)]
-duplicates.sort_values("Rank", ascending=True, inplace=True)
-print(duplicates)
+# df_lb had initally duplicate rows since this code is not needed - we commented it out
 
-# drop'em
+# duplicates=df_lb[df_lb.duplicated(keep=False)]
+# duplicates.sort_values("Rank", ascending=True, inplace=True)
+# print(duplicates)
 
-df_lb = df_lb.sort_values("Rank", ascending=True)
-df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
-df_lb.duplicated().sum() 
+# # drop'em
 
-# all cleaned 
+# df_lb = df_lb.sort_values("Rank", ascending=True)
+# df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
+# df_lb.duplicated().sum() 
+
+
 
 
 # this is not needed as in postitron you can see the data similar to R
@@ -34,7 +35,10 @@ print(df_all.isna().sum().sort_values(ascending=False).head(10))
 print(df_lb.isna().sum().sort_values(ascending=False).head(10))
 
 
-#intersections
+# df all does not have model size for 22 of the models, 
+# after join we will have to do scrape on the LLM dedicated pages for the model size
+
+#intersections - looking for columns with the same name
 
 print(set(df_all.columns).intersection(df_lb.columns))
 
@@ -51,14 +55,22 @@ def clean_model_name(series):
     )
 
 df_all["model"] = clean_model_name(df_all["modelId"])
-df_all.drop(columns=["modelId"], inplace=True)
+df_all.drop(columns=["modelId", "language", "pipeline_tag"], inplace=True)
 print(df_all.columns.tolist())
+df_all["created_at"] = pd.to_datetime(df_all["createdAt"]).dt.date
+df_all["last_modified"] = pd.to_datetime(df_all["lastModified"]).dt.date
+
+# language column will not be using so we droped language as well
+# pipeline tag variable is the same accross all models "text-generation" - drop
+# we extracted the date from createdAt and lastModifed columns
 
 
 df_lb["model"] = clean_model_name(df_lb["Model"])
-df_lb.drop(columns=["Model", "Unnamed: 11"], inplace=True, errors="ignore")
+df_lb.drop(columns=["Model", "Unnamed: 11", "Unnamed: 0"], inplace=True, errors="ignore")
 print(df_lb.columns.tolist())
 
+
+# Make all column names lower string
 
 df_all.columns = df_all.columns.str.lower()
 df_lb.columns = df_lb.columns.str.lower()
@@ -75,9 +87,9 @@ df_joined = pd.merge(
     how="inner"
 )
 
-df_joined = df_joined[["model", "model_type", "rank", "type"] 
-    + [c for c in df_joined.columns if c not in ["model", "model_type", "rank", "type"]]]
 
+df_joined = df_joined[["model", "model_type", "rank", "type"] 
+    + [c for c in df_joined.columns if c not in ["model", "model_type", "gated", "rank", "type"]]]
 
 
 # missing data 
@@ -90,8 +102,8 @@ df_joined.head(3).T
 
 #what models have the NA's since only a 10 we can list them
 
-na_rows = df_joined[df_joined["model_size"].isna() | df_joined["language"].isna()]
-na_rows_display = na_rows[["model", "model_size", "language"]]
+na_rows = df_joined[df_joined["model_size"].isna()]
+na_rows_display = na_rows[["model", "model_size"]]
 display(na_rows_display)
 
 
@@ -163,6 +175,10 @@ def clean_model_size(value):
 
 df_joined["model_size"] = df_joined["model_size"].apply(clean_model_size)
 
+# do another check 
+missing = df_joined[df_joined["model_size"].isna()]["model"]
+print(missing)
+
 #cannot find it so will add it manualy from here:
 #https://huggingface.co/microsoft/DialoGPT-medium
 df_joined.loc[df_joined["model"] == "microsoft/dialogpt-medium", "model_size"] = 0.147
@@ -219,6 +235,10 @@ df_joined["type"] = df_joined["type"].map(symbol_map).fillna("unknown")
 df_joined.to_csv("df_joined_clean.csv", index=False)
 
 
+# ---------------- data exploration
+
+import os
+os.makedirs("figures", exist_ok=True)
 
 
 sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
@@ -230,7 +250,9 @@ plt.figure(figsize=(8, 5))
 sns.boxplot(data=df_joined, x="model_size", color="skyblue")
 plt.title("Distribution of Model Sizes")
 plt.xlabel("Model Size (Billions)")
+plt.savefig("figures/Dist_by_model_size_boxpolt.png", dpi=300, bbox_inches='tight')
 plt.show()
+plt.close()
 
 plt.figure(figsize=(8, 5))
 sns.histplot(df_joined["model_size"], bins=30, kde=True)
@@ -238,15 +260,16 @@ sns.histplot(df_joined["model_size"], bins=30, kde=True)
 plt.title("Distribution of Model Sizes (in billions)")
 plt.xlabel("Model Size (B)")
 plt.ylabel("Count")
+plt.savefig("figures/Dist_by_model_size_hist.png", dpi=300, bbox_inches='tight')
 plt.show()
-
+plt.close()
 #compare open-source vs proprietary models,
 
 
 plt.figure(figsize=(8, 5))
 sns.violinplot(
     data=df_joined,
-    x="model_size",
+    x="type",
     y="average",
     hue="type",              # your real grouping column
     split=True,
@@ -254,9 +277,10 @@ sns.violinplot(
     palette="pastel",
     linewidth=1
 )
-plt.title("Distribution of Average Score by Model Size and Type")
+plt.title("Distribution of Average Score by Type")
 plt.xlabel("Model Size (B)")
 plt.ylabel("Average Score")
+plt.savefig("figures/avg_vs_size_violin.png", dpi=300, bbox_inches='tight')
 plt.show()
 
 # Averge vs Model-Size
