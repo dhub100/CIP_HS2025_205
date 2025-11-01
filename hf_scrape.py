@@ -19,7 +19,7 @@ class HFLeaderboardScraper:
     Web scraper for HuggingFace Open LLM Leaderboard using BeautifulSoup and Selenium.
 
     This class scrapes benchmark data from the HuggingFace Open LLM Leaderboard by:
-    1. Opening a Safari browser with Selenium
+    1. Opening the desired browser with Selenium
     2. Searching for specific models by name
     3. Extracting the first matching result from the leaderboard table
     4. Writing benchmark data to CSV files
@@ -43,13 +43,13 @@ class HFLeaderboardScraper:
         scraper.scrape_models(models, to_file="output.csv")
 
     Note:
-        - Requires Safari browser (WebDriver pre-installed on macOS)
+        - Requires Safari, Chrome, Edge or Firefox browser and Webdriver (WebDriver pre-installed on macOS)
         - Creates/appends to CSV files incrementally
         - Models not found on leaderboard are skipped with a warning message
         - Driver is restarted for each model to avoid session conflicts
     """
 
-    def __init__(self):
+    def __init__(self, browser):
         """
         Initialize HFLeaderboardScraper with base URL.
 
@@ -59,6 +59,7 @@ class HFLeaderboardScraper:
         self.base_url = (
             "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
         )
+        self.browser = browser
 
     def setup(self):
         """
@@ -67,7 +68,19 @@ class HFLeaderboardScraper:
         Returns:
             tuple: (WebDriver, WebDriverWait) - Safari driver and 10-second wait
         """
-        driver = selenium.webdriver.Safari()
+        if self.browser == "safari":
+            driver = selenium.webdriver.Safari()
+        elif self.browser == "chrome":
+            driver = selenium.webdriver.Chrome()
+        elif self.browser == "edge":
+            driver = selenium.webdriver.Edge()
+        elif self.browser == "firefox":
+            driver = selenium.webdriver.Firefox()
+        else:
+            raise AttributeError(
+                f"Browser '{self.browser}' is not support. Please choose either 'safari', 'chrome', 'edge' or 'firefox'"
+            )
+
         wait = WebDriverWait(driver, 10)
         return driver, wait
 
@@ -105,7 +118,7 @@ class HFLeaderboardScraper:
         Scrape HuggingFace leaderboard benchmark data for a list of models.
 
         For each model:
-        1. Opens Safari browser and navigates to leaderboard with search filter
+        1. Opens the specified browser and navigates to leaderboard with search filter
         2. Waits for dynamic content (iframe and table) to load
         3. Extracts first matching model from filtered results
         4. Validates model name matches search query
@@ -174,9 +187,9 @@ class HFLeaderboardScraper:
 
                 # Write or append the scraped content to a CSV file.
                 if not i:
-                    self.write_csv(values, header, to_file="en_test.csv")
+                    self.write_csv(values, header, to_file=to_file)
                 else:
-                    self.write_csv(values, to_file="en_test.csv")
+                    self.write_csv(values, to_file=to_file)
 
             # quite the driver to ensure no conflicts with session_id and stale elements
             self.teardown(driver)

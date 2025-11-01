@@ -6,22 +6,19 @@ format: html
 ### Scraping
 
 #### Exploration and Technical Challenges
+
 The HuggingFace Open Leaderboard presents benchmark data in a dynamic table embedded within an iframe. Initial exploration revealed that the
 table displays only 28 models by default, requiring either scrolling or search filtering to access additional entries. Since automated scrolling
 proved unreliable, the solution adopted URL-based filtering via `?search=[model_name]` parameters.
+Another option would have been to use the search bar element. However, the complexe implemention of said element and its client-server interaction made itsuse too difficult for us.
 
 #### Implementation and Structure
-The final implementation uses a `HFLeaderboardScraper` class built with Selenium, supporting multiple browsers (Chrome, Firefox, Safari, Edge).
-The scraper navigates the DOM hierarchy systematically: locating the iframe, switching context, and extracting data from standard HTML table
-elements (`<thead>`, `<tbody>`, `<tr>`, `<p>`). Model names, stored as links (`<a>` tags), require separate extraction and insertion at the
-correct position.
 
-Two key methods handle the scraping process: `scrape_header()` extracts column names once and writes them to CSV, while `scrape_models()`
-iterates through a model list, filtering the leaderboard for each entry and extracting the top search result. To ensure reliability, the driver
-reinitializes for each model and includes `time.sleep()` delays for complete page loading—a pragmatic solution that prioritizes stability over
-speed.
+The final implementation employs an HFLeaderboardScraper class developed using Selenium and BeautifulSoup, with support for multiple browsers including Chrome, Firefox, Safari, and Edge. Through its main method, `scrape_models()`, the scraper systematically navigates the DOM hierarchy — locating the relevant iframe, switching context, and extracting data from standard HTML table elements (<thead>, <tbody>, <tr>, <p>, etc.). It incorporates both dynamic and static waiting strategies, along with validation steps to correctly handle cases where models are absent from the leaderboard or where duplicate entries may appear due to similar model names. To avoid stale element references and session-related issues caused by the dynamic filtering mechanism, the scraper initializes a unique driver instance at each iteration of the loop, ensuring a smooth and stable execution process.
+
 
 #### Output and Integration
-Data is appended to CSV incrementally during scraping, preventing data loss from runtime errors. Models without benchmark data are automatically
-skipped, though some duplicates occur when similar model variants appear in search results. The resulting dataset shares a common identifier
+
+Data is appended to CSV incrementally during scraping, preventing data loss from runtime errors. 
+The resulting dataset shares a common identifier
 (`Model`/`modelId`) with the API-collected metadata, enabling straightforward merging for downstream analysis.
