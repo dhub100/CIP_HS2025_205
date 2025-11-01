@@ -69,4 +69,10 @@ The fully cleaned and joined dataset was saved as df_joned_clean.pkl for exporat
 
 This section was developed by Alin Sever and finalized with support of Robin and Daniel.
 
-TBD TBD TBD TBD
+Data exploration  examines the relashionship between model characteristics, average benchmar performance and efficiency. Exploratory visualizations were generated using Seaborn, Matplotlib, and Plotnine to illustrate key trends in the dataset. Initial analyses focused on the distribution of model sizes. Scatterplots and regression lines were used to assess the relationship between model size and performance, both on linear and logarithmic scales, revealing a strong positive association.
+
+The Pearson correlation coefficient between model size and average score was approximately 0.75, indicating strong correlation. Further comparison using an independent t-test indicated no statistically significant performance difference between open-source and proprietary models. 
+
+To extend the analysis, we looked at the average score per billion parameters and per kilogram of CO₂ emitted. The results showed that although smaller open-source models tend to have lower overall scores, they perform very efficiently when considering their size and carbon footprint.
+
+All visual outputs were exported to the figures/ directory.
