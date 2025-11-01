@@ -18,7 +18,11 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import (
+    NoSuchElementException,
+    TimeoutException,
+    StaleElementReferenceException,
+)
 
 # %% [markdown]
 # [Hugging Face Open Leadboards](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/) has a faily simply structure.
@@ -188,6 +192,7 @@ with open("hff_leaderboard.csv", "a") as f:
 def hf_scrape(models: list[str], to_file: str = "hf_leaderboard.csv"):
     with open(to_file, "a") as f:
         for model in models:
+            print(f"Scraping for model {model}")
             driver = webdriver.Safari()
             time.sleep(5)
             # Open the webpage with the filter
@@ -234,113 +239,266 @@ new_models = hf_long_meta.loc[np.invert(hf_long_meta.modelId.isin(models).values
 hf_scrape(new_models.modelId.values)
 
 # %% [markdown]
+# The previous code works fine.
+# However, the assignement specifies that it needs to use Beautiful Soup.
+# Hence, I'll rebuild the code to meet this requirement.
+#
+# To avoid 'StaleReferenceElementException' and Session id issue, I quit and re-open the driver at each loop, otherwise sessions and extracted element conflicts with each other.
+# I also establish appropriate time wait to ensure proper loading and extraction
+# Extracting the DOM of a dynamically rendered table can be problematic.
+# To make sure that the DOM extracted is the one I want, I first extract the model of the first, and the compare the DOM page source with the extract model name, ensuring no issue.
+# This step is also useful to filter duplicates.
+
+
+# %%
+def setup():
+    driver = selenium.webdriver.Safari()
+    wait = WebDriverWait(driver, 10)
+    return driver, wait
+
+
+def teardown(driver):
+    driver.quit()
+
+
+def write_csv(values, header=None, to_file="hf_leaderboard.csv"):
+    with open(to_file, "a") as f:
+        if header is not None:
+            f.write(",".join(header))
+            f.write("\n")
+            f.write(",".join(values))
+            f.write("\n")
+        else:
+            f.write(",".join(values))
+            f.write("\n")
+
+
+base_url = "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
+
+
+for i, model in enumerate(models[:10]):
+    # Setup the driver
+    driver, wait = setup()
+    print(f"Scraping for model: {model} ({i})")
+    # Filter the table
+    driver.get(base_url + f"?search={models[i]}")
+    # Ensures that the table has time to be filtered
+    time.sleep(4)
+
+    # Wait for dynamic iFrame to be present in the DOM before extracting it and switching to it.
+    wait.until(EC.presence_of_element_located((By.ID, "iFrameResizer0")))
+    iframe = driver.find_element(By.ID, "iFrameResizer0")
+    driver.switch_to.frame(iframe)
+
+    # Checks for model that aren't benchmarked, since there is no table if that is the case.
+    try:
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
+    except TimeoutException:
+        print(f"Model {model} not found in leaderboards, thus cannot be extracted.\n")
+        teardown(driver)
+        continue
+
+    # Extract the first row model name
+    first_row = driver.find_element(By.CSS_SELECTOR, "table tbody tr:first-child")
+    model_link = first_row.find_element(By.TAG_NAME, "a")
+    model_name = model_link.text
+
+    print(f"Model of the first row: {model_name}")
+
+    # Checks for the DOM to be loaded correctly.
+    # Make sure that 'driver.page_source' don't refer to a previous filtered table.
+    if model_name == model:
+        # Get the DOM of the page with the filtered table.
+        html_source = driver.page_source
+        soup = BeautifulSoup(html_source, "html.parser")
+        # Extract each values of the tables, as well as its column name.
+
+        header = [p.text for p in soup.find_all("tr")[0]][1:]
+        values = [p.text for p in soup.find_all("tr")[1]][1:]
+        print(
+            f"Model {model} benchmark: \n\t",
+            {header: value for header, value in zip(header, values)},
+            "\n\n",
+        )
+
+        # Write or append the scraped content to a CSV file.
+        if not i:
+            write_csv(values, header, to_file="en_test.csv")
+        else:
+            write_csv(values, to_file="en_test.csv")
+
+    # quite the driver to ensure no conflicts with session_id and stale elements
+    teardown(driver)
+
+
+# %% [markdown]
 # Let's build a new class for reusability and cleanliness.
 
 
 # %%
 class HFLeaderboardScraper:
-    def __init__(self, browser="safari", wait_time=5):
-        """
-        Initialize HuggingFace Leaderboard scraper with browser preference.
+    """
+    Web scraper for HuggingFace Open LLM Leaderboard using BeautifulSoup and Selenium.
 
-        Args:
-            browser: Browser choice - "chrome", "firefox", "safari", or "edge"
-            wait_time: Maximum wait time for elements in seconds
-            headless: Run browser in headless mode (not supported for Safari)
+    This class scrapes benchmark data from the HuggingFace Open LLM Leaderboard by:
+    1. Opening a Safari browser with Selenium
+    2. Searching for specific models by name
+    3. Extracting the first matching result from the leaderboard table
+    4. Writing benchmark data to CSV files
+
+    The scraper handles dynamic content by waiting for page loads, swtiches to iFrame and validates
+    that the correct model is extracted by comparing the first row's model name
+    with the search query.
+
+    Attributes:
+        base_url (str): HuggingFace Open LLM Leaderboard URL
+
+    Methods:
+        setup(): Initialize Selenium WebDriver and WebDriverWait
+        teardown(driver): Close the WebDriver instance
+        write_csv(values, header, to_file): Write data to CSV file
+        scrape_models(models, to_file): Scrape benchmark data for list of models
+
+    Example:
+        scraper = HFLeaderboardScraper()
+        models = ["mistralai/Mistral-7B-v0.1", "meta-llama/Llama-2-7b"]
+        scraper.scrape_models(models, to_file="output.csv")
+
+    Note:
+        - Requires Safari browser (WebDriver pre-installed on macOS)
+        - Creates/appends to CSV files incrementally
+        - Models not found on leaderboard are skipped with a warning message
+        - Driver is restarted for each model to avoid session conflicts
+    """
+
+    def __init__(self):
         """
-        self.browser = browser.lower()
-        self.wait_time = wait_time
+        Initialize HFLeaderboardScraper with base URL.
+
+        The base URL points to the HuggingFace Open LLM Leaderboard.
+        Driver initialization is deferred to the setup() method.
+        """
         self.base_url = (
             "https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/"
         )
-        self.driver = None
 
-    def _get_driver(self):
+    def setup(self):
         """
-        Create and return WebDriver instance based on browser preference.
-        """
-        if self.browser == "chrome":
-            return selenium.webdriver.Chrome()
-        elif self.browser == "firefox":
-            return selenium.webdriver.Firefox()
-        elif self.browser == "safari":
-            return selenium.webdriver.Safari()
-        elif self.browser == "edge":
-            return selenium.webdriver.Edge()
-        else:
-            raise ValueError(
-                f"Unsupported browser: {self.browser}. Choose from 'chrome', 'firefox', 'safari', or 'edge'"
-            )
+        Create and return Selenium WebDriver and WebDriverWait instances.
 
-    def _initialize_driver(self):
+        Returns:
+            tuple: (WebDriver, WebDriverWait) - Safari driver and 10-second wait
         """
-        Initialize WebDriver
-        """
-        self.driver = self._get_driver()
-        time.sleep(5)
+        driver = selenium.webdriver.Safari()
+        wait = WebDriverWait(driver, 10)
+        return driver, wait
 
-    def scrape_header(self, to_file):
+    def teardown(self, driver):
         """
-        Scrape for the headers of the table.
-        """
-        with open(to_file, "a") as f:
-            self._initialize_driver()
-            self.driver.get(self.base_url)
-            time.sleep(5)
-            iframe = self.driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
-            self.driver.switch_to.frame(iframe)
-            table = self.driver.find_element(By.TAG_NAME, "table")
-            thead = table.find_element(By.TAG_NAME, "thead")
-            colnames = [
-                th.find_element(By.TAG_NAME, "p").text
-                for th in thead.find_elements(By.TAG_NAME, "th")
-            ]
-            # Write columns or variable names
-            colnames.append("\n")
-            f.write(",".join(colnames[1:]))
-            self.driver.close()
-
-    def scrape_models(
-        self,
-        models: list[str],
-        to_file: str = "fh_leaderboard.csv",
-        write_header=False,
-    ):
-        """
-        Scrape HuggingFace leaderboard data for a list of models.
+        Close and quit the WebDriver instance.
 
         Args:
-            models: List of model names to scrape
-            to_file: Output CSV file path
-            write_header: If True, write column headers before data
+            driver: Selenium WebDriver instance to close
+        """
+        driver.quit()
+
+    def write_csv(self, values, header=None, to_file="hf_leaderboard.csv"):
+        """
+        Write or append benchmark data to CSV file.
+
+        Args:
+            values (list): List of benchmark values to write as a row
+            header (list, optional): List of column names. If provided, writes
+                                    header row followed by values row
+            to_file (str): Output CSV file path. Default: "hf_leaderboard.csv"
         """
         with open(to_file, "a") as f:
-            if write_header:
-                self.scrape_header(to_file)
-            for model in models:
-                self._initialize_driver()
-                # Open the webpage with the filter
-                self.driver.get(self.base_url + f"?search={model}")
-                time.sleep(5)
-                # Switch to the corresponding iFrame on the webpage
-                iframe = self.driver.find_element(By.XPATH, '//*[@id="iFrameResizer0"]')
-                self.driver.switch_to.frame(iframe)
-                # Check for unavailable model on the website
-                try:
-                    # Get the table element
-                    table = self.driver.find_element(By.TAG_NAME, "table")
-                except NoSuchElementException:
-                    driver.close()
-                    continue
-                # Get the body element
-                tbody = table.find_element(By.TAG_NAME, "tbody")
-                # Get the first row, so the first model appearing in the search
-                row = tbody.find_element(By.TAG_NAME, "tr")
-                # Get all the information from the row
-                obs = [p.text for p in row.find_elements(By.TAG_NAME, "p")]
-                # Make sure to also get the model name, which is a link
-                obs.insert(2, row.find_element(By.TAG_NAME, "a").text)
-                # Write everything inside the CSV file as a new row.
-                obs.append("\n")
-                f.write(",".join(obs))
-                self.driver.close()
+            if header is not None:
+                f.write(",".join(header))
+                f.write("\n")
+                f.write(",".join(values))
+                f.write("\n")
+            else:
+                f.write(",".join(values))
+                f.write("\n")
+
+    def scrape_models(self, models, to_file="hf_leaderboard.csv"):
+        """
+        Scrape HuggingFace leaderboard benchmark data for a list of models.
+
+        For each model:
+        1. Opens Safari browser and navigates to leaderboard with search filter
+        2. Waits for dynamic content (iframe and table) to load
+        3. Extracts first matching model from filtered results
+        4. Validates model name matches search query
+        5. Parses HTML with BeautifulSoup to extract benchmark data
+        6. Writes header (first model only) and values to CSV
+        7. Closes browser to avoid session conflicts
+
+        Args:
+            models (list): List of model IDs to scrape (e.g., "mistralai/Mistral-7B-v0.1")
+            to_file (str): Output CSV file path. Default: "hf_leaderboard.csv"
+
+        Note:
+            - First model writes both header and data rows
+            - Subsequent models append data rows only
+            - Models not found on leaderboard are skipped with a warning
+            - Browser restarts for each model to prevent StaleElementReferenceException
+        """
+        for i, model in enumerate(models):
+            # Setup the driver
+            driver, wait = setup()
+            print(f"Scraping for model: {model} ({i}/{len(models)})")
+            # Filter the table
+            driver.get(self.base_url + f"?search={model}")
+            # Ensures that the table has time to be filtered
+            time.sleep(4)
+
+            # Wait for dynamic iFrame to be present in the DOM before extracting it and switching to it.
+            wait.until(EC.presence_of_element_located((By.ID, "iFrameResizer0")))
+            iframe = driver.find_element(By.ID, "iFrameResizer0")
+            driver.switch_to.frame(iframe)
+
+            # Checks for model that aren't benchmarked, since there is no table if that is the case.
+            try:
+                wait.until(EC.presence_of_element_located((By.TAG_NAME, "table")))
+            except TimeoutException:
+                print(
+                    f"Model {model} not found in leaderboards, thus cannot be extracted.\n"
+                )
+                teardown(driver)
+                continue
+
+            # Extract the first row model name
+            first_row = driver.find_element(
+                By.CSS_SELECTOR, "table tbody tr:first-child"
+            )
+            model_link = first_row.find_element(By.TAG_NAME, "a")
+            model_name = model_link.text
+
+            print(f"Model of the first row: {model_name}")
+
+            # Checks for the DOM to be loaded correctly.
+            # Make sure that 'driver.page_source' don't refer to a previous filtered table.
+            if model_name == model:
+                # Get the DOM of the page with the filtered table.
+                html_source = driver.page_source
+                soup = BeautifulSoup(html_source, "html.parser")
+                # Extract each values of the tables, as well as its column name.
+
+                header = [p.text for p in soup.find_all("tr")[0]][1:]
+                values = [p.text for p in soup.find_all("tr")[1]][1:]
+                print(
+                    f"Model {model} benchmark: \n\t",
+                    {header: value for header, value in zip(header, values)},
+                    "\n\n",
+                )
+
+                # Write or append the scraped content to a CSV file.
+                if not i:
+                    write_csv(values, header, to_file="en_test.csv")
+                else:
+                    write_csv(values, to_file="en_test.csv")
+
+            # quite the driver to ensure no conflicts with session_id and stale elements
+            teardown(driver)
