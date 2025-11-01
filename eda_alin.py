@@ -104,8 +104,12 @@ df_joined = pd.merge(
 )
 
 
-df_joined = df_joined[["model", "model_type", "rank", "type"] 
-    + [c for c in df_joined.columns if c not in ["model", "model_type", "gated", "rank", "type"]]]
+# moving columns to the front
+df_joined = df_joined[
+    ["model", "model_type", "rank", "type", "gated"]
+    + [c for c in df_joined.columns if c not in ["model", "model_type", "rank", "type", "gated"]]
+]
+
 
 
 # ------------- 1g missing data 
@@ -326,8 +330,8 @@ for col in numeric_cols:
 
 
 # here in Theory we can apply the IQR treatement using IQR clipping 
-# values outside the IQR willbe capped
-# we only have 40 rows so we will not apply the clipping since the large models will clipped
+# values outside the IQR will be capped
+# we only have 40 rows so we will not apply the clipping since the large models will be clipped
 # for col in numeric_cols:
 #     s = df_joined[col]
 #     if s.dropna().nunique() <= 1:
