@@ -56,10 +56,10 @@ scraper = HFLeaderboardScraper(browser="safari")
 api_data = pd.read_csv("huggingface_100_llm_metadata.csv")
 models = api_data.modelId.values
 
-# Scrape models and write to CSV (with headers on first run)
+# Scrape models and write to CSV
 scraper.scrape_models(models, to_file="output.csv")
 
-# Add more models to existing file (no headers needed)
+# Add more models to existing file
 more_models = ["google/gemma-7b"]
 scraper.scrape_models(more_models, to_file="output.csv")
 ```
