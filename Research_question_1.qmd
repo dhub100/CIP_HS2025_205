@@ -1,0 +1,125 @@
+---
+format:
+  html:
+    code-fold: true
+
+---
+
+
+
+```{python}
+#| label: packages
+#| requirements: ["pandas", "numpy", "matplotlib", "seaborn"]
+#| echo: false
+
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.ticker import PercentFormatter
+import os
+
+```
+
+```{python}
+#| label: import
+#| echo: false
+
+# import file
+df_joined = pd.read_pickle("df_joined_clean.pkl")
+
+
+#colors
+sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
+COLORS = {
+    "main": "#A1C9F4",   # blue
+    "accent": "#FFB482", # pastel orange
+    "cat3": "#8DE5A1"    # green
+}
+
+
+```
+
+## Q 1 – Which models offer the best size-to-performance ratio?
+
+To explore which models offer the best size-to-performance ratio, we examined the relationship between the number of parameters (in billions) and each model's average benchmark score with the overlay LOESS smother. We deliberately keepthe x-axis linear to maximize readbility: on the plot it can immediately see absolute size difference and where performance starts to flaten.
+
+
+
+```{python}
+#| label: avg_benchmark_vs_size_loess
+#| echo: false
+#| fig-cap: "Figure1: Average benchmark score vs. model size with LOESS smoother (log10 scale)"
+
+
+from plotnine import ggplot, aes, geom_point, geom_smooth, labs, theme_bw, scale_x_log10
+
+p=(
+    ggplot(df_joined, aes(x="model_size", y="average"))
+    + geom_point(alpha=0.30, color=COLORS["main"])
+    + geom_smooth(method="loess", color=COLORS["accent"], se=False)
+    + labs(
+    title="Average Score vs Model Size (LOESS smoother)",
+    x="Model Size (B)",
+    y="Average Score (%)"
+    )
+    + theme_bw()
+)
+p
+```
+
+
+
+The locally weighted curve (LOESS) shows a non-linear scalling patern: performance rises quickly for small to mid size models and plateaus beyond ~20-30B, indicating a slower increase in benchmark score for the larger models.
+The correlations shows that larger models tend to score higher but gains in score slows doen as sizes increases.
+
+We computed the Peason correlation, to verify the overall strenght of this association, 
+```{python}
+
+#| label: corr_model_size_perf
+#| echo: false
+#| output: asis
+
+corr = df_joined[["model_size", "average"]].corr(method="pearson").iloc[0,1]
+print(f"The resulting coefficient (r ≈ {corr:.2f}) confirms the strong positive correlation that larger models achieve higher bechmark scores.")
+
+```
+
+
+```{python}
+#| label: table_model_size_vs_benchmarks
+#| echo: false
+#| tbl-cap: "Top models by size with benchmark performance metrics"
+#| tbl-cap-location: top
+
+
+benchmark_cols = [
+    "model", "model_size", "average"]
+available_cols = [c for c in benchmark_cols if c in df_joined.columns]
+
+# Sort by model_size (descending)
+tbl_bench = (
+    df_joined[available_cols]
+    .sort_values("average", ascending=False)
+    .head(10)
+    .copy()
+)
+
+# Round numeric values for clean display
+num_cols = [c for c in tbl_bench.columns if c not in ["model"]]
+tbl_bench[num_cols] = tbl_bench[num_cols].round(2)
+
+tbl_bench
+
+
+```
+
+
+Larger models tend to dominate the upper end of the benchmark score; however, one outlier is *Qwen 2.5-32B-Instruct*, the model delivers the highest average score (≈ 46.6 %) despite that is half the size of *Meta-Llama 3 70B* models.  
+
+This shows that the expected scalling pattern shows that model architecture, training efficiency and fine-tunning strategies can outweight sheer scale.  
+
+Other compact models, such as *Phi-4* and *Llama 3-8B-Instruct*, achieve respectable scores given their size, further supporting the idea that optimization quality, not just model size, drives performance.  
+
+These results highlight that smaller, well-optimized models can offer an efficient size-to-performance trade-off.
