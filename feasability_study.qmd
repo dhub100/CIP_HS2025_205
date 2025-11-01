@@ -1,0 +1,81 @@
+---
+title: "Feasibility Study – Evaluating and Comparing Large Language Models (LLMs)"
+format: html
+---
+
+## Introduction
+The goal of this project is to collect and analyze metadata on various Large Language Models (LLMs) to better understand their characteristics and performance across multiple benchmarks. Data will be gathered through the Hugging Face API and web scraping of leaderboard websites to extract complementary information such as model costs, context window sizes, and performance metrics.
+
+## Research Questions
+The project aims to answer the following key questions:
+
+1. Which models offer the best size-to-performance ratio?  
+2. Which models are the most cost-effective (price per 1,000 tokens)?  
+3. How do open-source models differ from proprietary ones in terms of performance, accessibility, and transparency?
+
+## Data Sources
+### API
+
+#### 1. **Hugging Face Models API**
+The [Hugging Face Models API](https://huggingface.co/docs/hub/api#get-apimodels) provides extensive metadata for thousands of open-source models, including architecture, parameters, tasks, and usage information.  
+Data collection through this API is straightforward, and the reliability of the information is generally high since the hosted models are open source and publicly documented.
+
+### Scraped Data
+#### 2. **Vellum (vellum.ai)**
+Vellum hosts benchmark leaderboards for various proprietary and open-source models, comparing them across datasets such as GRIND, AIME2024, GPQA, and MATH500.  
+The site also provides details on costs, speed, and context window sizes. Its pages appear static, making web scraping relatively simple. The HTML structure is consistent, with key elements (e.g., `dashboard_wrap`, `comparison_table-header`, `comparison_table-content`) enabling efficient data extraction.
+
+#### 3. **LLM-Stat**
+LLM-Stat is another reliable static source presenting benchmark data and leaderboards for multiple LLMs. Its use of standard HTML `<table>` elements allows for straightforward parsing and filtering.
+
+By analyzing the structure of these pages, we can design specialized scraping strategies that efficiently retrieve and organize data from each source.
+
+## Potential Risks and Mitigation Strategies
+
+### 1. Data Quality and Reliability
+**Risk:**  
+Benchmark data—especially from proprietary models—may lack transparency. The evaluation methods are often undisclosed, and some benchmarks may overlap with a model’s training data, leading to inflated results.
+
+**Mitigation:**  
+Perform cross-validation by comparing results across several independent leaderboards. Focus the analysis on performance metrics that are consistently reported across multiple sources to ensure more reliable comparisons.
+
+---
+
+### 2. Incomplete or Missing Data
+**Risk:**  
+Certain key details such as pricing, context window size, or model architecture are often undisclosed for proprietary models, which limits the depth of the analysis.
+
+**Mitigation:**  
+Identify which missing information is most essential and attempt to locate it through alternative channels like official documentation, research papers, or press releases. If these details remain unavailable, clearly document the data gaps and interpret comparisons cautiously.
+
+---
+
+### 3. Inconsistent Model Naming
+**Risk:**  
+Model names are not standardized across data sources (e.g., “LLaMA-2-70B” vs. “llama2-70b”), which can cause mismatches during data integration.
+
+**Mitigation:**  
+Create a mapping table or dictionary that normalizes model names across all datasets, ensuring consistent identification and comparison.
+
+---
+
+### 4. Website Structure Changes and Scraping Limitations
+**Risk:**  
+Leaderboard websites may alter their HTML layout or restrict automated requests, potentially breaking scraping scripts or limiting access to data.
+
+**Mitigation:**  
+Implement flexible scraping logic that can adapt to layout changes and store scraped HTML locally as a backup. Use multiple data sources to prevent single points of failure. If scraping becomes infeasible, rely on alternative data such as the Hugging Face “Open LLM Leaderboard” API or publicly available benchmark CSV files on GitHub.
+
+---
+
+### 5. Missing or Biased Benchmark Data
+**Risk:**  
+Not all models are evaluated on the same benchmarks, and certain tests may inherently favor specific architectures, creating potential bias in the results.
+
+**Mitigation:**  
+Restrict the analysis to widely used and comparable benchmarks (e.g., MMLU, GSM8K) and explicitly state any limitations regarding data coverage or benchmark bias. When possible, use normalized metrics to make fairer comparisons across different evaluation contexts.
+
+
+## Conclusion
+This feasibility study confirms that the project is technically viable. Reliable data can be obtained from the Hugging Face API and trustworthy leaderboard websites. While certain limitations exist—particularly regarding proprietary models and benchmark validity—these challenges can be mitigated through cross-verification, transparent reporting, and adaptive data collection strategies.
+
