@@ -2,7 +2,8 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-
+import numpy as np
+from matplotlib.colors import LinearSegmentedColormap
 
 df = pd.read_csv('df_joined_clean.csv')
 # print(df.shape)
@@ -20,6 +21,15 @@ sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
 
 blue = "#A1C9F4"
 
+white_to_blue = LinearSegmentedColormap.from_list(
+    "white_to_blue",
+    [
+        (0.0, "#F8FBFE"),   # fast weiß (aber nicht ganz)
+        (0.1, "#D6E7FA"),   # hellblau bleibt länger
+        (0.2, "#B4D3F7"),   # mittleres Pastellblau
+        (1.0, blue),        # kräftiges Blau im Zentrum
+    ]
+)
 # Density plot with scatter overlay
 
 plt.figure(figsize=(8, 5))
@@ -27,7 +37,7 @@ sns.kdeplot(
     x=df["co₂ cost"],
     y=df["likes_per_download"],
     fill=True,
-    color=blue,
+    cmap=white_to_blue,
     alpha=0.6,
     levels=20,
     thresh=0,
