@@ -40,7 +40,11 @@ Remarks: The scraping of HuggingFace website is totally allowed as there is no `
 
 #### **Browser Driver:**
 
-Install the appropriate browser driver for your system: - **Chrome:** [chromedriver](https://chromedriver.chromium.org/) - **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases) - **Safari:** Pre-installed on macOS (no setup needed) - **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
+Install the appropriate browser driver for your system: 
+- **Chrome:** [chromedriver](https://chromedriver.chromium.org/)
+- **Firefox:** [geckodriver](https://github.com/mozilla/geckodriver/releases)
+- **Safari:** Pre-installed on macOS (no setup needed)
+- **Edge:** [msedgedriver](https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/)
 
 #### **Dependencies:**
 
