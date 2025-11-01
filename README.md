@@ -12,12 +12,27 @@ It consists of a Python script that connects to the Hugging Face API to retrieve
 
 This part of the project was implemented by Robin Girardin.
 
+This class automates the process of extracting benchmark data from the Hugging Face Open LLM Leaderboard.
+It scrape for defined models in a loop. 
+In each loop, the class does the following.
+It opens a Safari/Chrome/Edge of Firefox browser and navigates to the leaderboard with a specified search filter, then waits for the dynamic content — including the iframe and table — to fully load.
+Once ready, it extracts the first matching model from the filtered results and validates that the model name corresponds to the search query.
+This small validation steps ensures no duplicates in the data as long as the model list provided don't contain any.
+The HTML content is then parsed using BeautifulSoup to retrieve benchmark data, which is written to a CSV file (including the header on the first extraction only).
+Since the CSV file is written incrementally, no information is lost in case of runtime error or issues.
+Finally, the browser session is cleanly closed to prevent session conflicts during subsequent runs.
+
 ### How it works
 
 This class-based scraper extracts benchmark data for LLM models from the [HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/).
-It starts by extracting the column names of the leaderboard table and then searches for specific models by filtering the table by model name.
-If a corresponding model is found, it extracts the first matching result from the leaderboard table, otherwise the model is skipped.
-All scraped information are appended incrementally to a dedicated `.csv` file (default: `hf_leaderboard.csv`), as to not lose any information in case of runtime issues.
+
+1. Opens the specified browser and navigates to leaderboard with search filter
+2. Waits for dynamic content (iframe and table) to load
+3. Extracts first matching model from filtered results
+4. Validates model name matches search query
+5. Parses HTML with BeautifulSoup to extract benchmark data
+6. Writes header (first model only) and values to CSV
+7. Closes browser to avoid session conflicts
 
 ### Setup
 
@@ -35,18 +50,18 @@ Install the required Python packages: `bash    pip install selenium`
 from hf_scrape import HFLeaderboardScraper
 
 # Create scraper instance
-scraper = HFLeaderboardScraper(browser="safari", wait_time=5)
+scraper = HFLeaderboardScraper(browser="safari")
 
 # Define models to scrape, by loading the API data collected.
-api_data = pd.read_csv("hf_metadata_100_leaderboard.csv")
+api_data = pd.read_csv("huggingface_100_llm_metadata.csv")
 models = api_data.modelId.values
 
-# Scrape models and write to CSV (with headers on first run)
-scraper.scrape_models(models, to_file="output.csv", write_header=True)
+# Scrape models and write to CSV
+scraper.scrape_models(models, to_file="output.csv")
 
-# Add more models to existing file (no headers needed)
+# Add more models to existing file
 more_models = ["google/gemma-7b"]
-scraper.scrape_models(more_models, to_file="output.csv", write_header=False)
+scraper.scrape_models(more_models, to_file="output.csv")
 ```
 
 ### Output
