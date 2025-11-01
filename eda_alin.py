@@ -3,47 +3,61 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from matplotlib.ticker import PercentFormatter
-
+import requests
+from bs4 import BeautifulSoup
+import re
 
 df_all = pd.read_csv("huggingface_llm_metadata.csv")
 #df_100 = pd.read_csv("huggingface_100_llm_metadata.csv")
 df_lb = pd.read_csv("hf_scraped.csv")
 
+
+
+# -------------------------- Check for gaps / missing data ----------------------
+
+# data inspect 
+display(df_all.head())  
+display(df_lb.head())
+
+print(df_all.columns.tolist())
+print(df_lb.columns.tolist())
+
+# ----------- 1a Check for duplicate row
+
 print(df_all.duplicated().sum())
 print(df_lb.duplicated().sum())
 
 
-# df_lb had initally duplicate rows since this code is not needed - we commented it out
+# df_lb had initally duplicate rows since this code is not needed
+# code is commented it out since now is redudant
 
 # duplicates=df_lb[df_lb.duplicated(keep=False)]
 # duplicates.sort_values("Rank", ascending=True, inplace=True)
 # print(duplicates)
 
-# # drop'em
+#---------- 1b we droped duplicate rows
 
 # df_lb = df_lb.sort_values("Rank", ascending=True)
 # df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
 # df_lb.duplicated().sum() 
 
 
+# ----------- 1c Checking for na
 
 
-# this is not needed as in postitron you can see the data similar to R
-display(df_all.head())  
-print(df_all.columns.tolist())
 print(df_all.isna().sum().sort_values(ascending=False).head(10))
 print(df_lb.isna().sum().sort_values(ascending=False).head(10))
 
-
+# explanation:
 # df all does not have model size for 22 of the models, 
 # after join we will have to do scrape on the LLM dedicated pages for the model size
 
 #intersections - looking for columns with the same name
 
 print(set(df_all.columns).intersection(df_lb.columns))
+# no intersection - we will create variables with the same name so we can join
 
-
-# creting a function to have same names for models
+# -------------1c creting a function to clean the names for models (make name of the model the same)
 
 def clean_model_name(series):
     return (
@@ -54,23 +68,25 @@ def clean_model_name(series):
         .str.replace(r"[^a-z0-9_\-/\.]", "", regex=True)  
     )
 
+# --------------1d creating the model variables in both dataset and droping the unnecessary column
+
+#df_all dataset
 df_all["model"] = clean_model_name(df_all["modelId"])
 df_all.drop(columns=["modelId", "language", "pipeline_tag"], inplace=True)
 print(df_all.columns.tolist())
-df_all["created_at"] = pd.to_datetime(df_all["createdAt"]).dt.date
-df_all["last_modified"] = pd.to_datetime(df_all["lastModified"]).dt.date
+
 
 # language column will not be using so we droped language as well
 # pipeline tag variable is the same accross all models "text-generation" - drop
 # we extracted the date from createdAt and lastModifed columns
 
-
+# df_lb dataset
 df_lb["model"] = clean_model_name(df_lb["Model"])
 df_lb.drop(columns=["Model", "Unnamed: 11", "Unnamed: 0"], inplace=True, errors="ignore")
 print(df_lb.columns.tolist())
 
 
-# Make all column names lower string
+# ------------- 1e Make all column names lower string
 
 df_all.columns = df_all.columns.str.lower()
 df_lb.columns = df_lb.columns.str.lower()
@@ -78,7 +94,7 @@ df_lb.columns = df_lb.columns.str.lower()
 
 
 
-# inner join 
+# ----------------- 1f inner join (4 Format your dataset)
 
 df_joined = pd.merge(
     df_all,
@@ -92,16 +108,14 @@ df_joined = df_joined[["model", "model_type", "rank", "type"]
     + [c for c in df_joined.columns if c not in ["model", "model_type", "gated", "rank", "type"]]]
 
 
-# missing data 
+# ------------- 1g missing data 
 
 missing_summary = df_joined.isna().sum().sort_values(ascending=False)
 print(missing_summary)
 
-#easier to see column names
-df_joined.head(3).T
 
-#what models have the NA's since only a 10 we can list them
 
+# what models have the NA's since only a 10 we can list them
 na_rows = df_joined[df_joined["model_size"].isna()]
 na_rows_display = na_rows[["model", "model_size"]]
 display(na_rows_display)
@@ -111,11 +125,11 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-
+# ----------- 1h webscraper
 
 def get_model_size(model_id):
     """
-    Extracts model size info (e.g., '88.2M params', '1.5B parameters') from a Hugging Face model card.
+    Extracts model size info from a Hugging Face model card.
     """
     url = f"https://huggingface.co/{model_id}"
     headers = {"User-Agent": "Mozilla/5.0"}  
@@ -151,10 +165,39 @@ for model_name in missing:
 # match = re.search(r"(\d+\.?\d*\s*[mb]\s*parameters?)", html, re.IGNORECASE)
 # print(match.group(1) if match else "Not found")
 
+# do another check 
+missing = df_joined[df_joined["model_size"].isna()]["model"]
+print(missing)
+
+#cannot find it so will add it manualy from here:
+#https://huggingface.co/microsoft/DialoGPT-medium
+df_joined.loc[df_joined["model"] == "microsoft/dialogpt-medium", "model_size"] = 0.147
 
 
-# cleaning model_size variable and transforming to billions for consistency
+missing = df_joined[df_joined["model_size"].isna()]["model"]
+print(missing)
 
+
+
+# -----------------2. columns datatypes and Changes
+
+df_joined.info()
+df_joined.dtypes.value_counts()
+#easier to see column names
+df_joined.head(3).T
+
+# we will have to change severl columns, date, percentages, remove kg
+
+#--------2a transform dates
+
+df_joined["created_at"] = pd.to_datetime(df_joined["createdat"]).dt.date
+df_joined["last_modified"] = pd.to_datetime(df_joined["lastmodified"]).dt.date
+df_joined.drop(columns=["createdat", "lastmodified"], inplace=True)
+
+
+df_joined.head(3).T
+
+#--------2b cleaning model_size variable and transforming to billions for consistency
 def clean_model_size(value):
     if pd.isna(value):
         return None
@@ -172,23 +215,12 @@ def clean_model_size(value):
         return None
 
 
-
 df_joined["model_size"] = df_joined["model_size"].apply(clean_model_size)
 
-# do another check 
-missing = df_joined[df_joined["model_size"].isna()]["model"]
-print(missing)
-
-#cannot find it so will add it manualy from here:
-#https://huggingface.co/microsoft/DialoGPT-medium
-df_joined.loc[df_joined["model"] == "microsoft/dialogpt-medium", "model_size"] = 0.147
 
 
-missing = df_joined[df_joined["model_size"].isna()]["model"]
-print(missing)
+# ----------------2c Convert strings like '45.3 %' to float 45.3 
 
-
-# Convert strings like '45.3 %' to float 45.3 
 percent_cols = ["average", "ifeval", "bbh", "math", "gpqa", "musr", "mmlu-pro"]
 
 def clean_percent(series):
@@ -203,7 +235,7 @@ for col in percent_cols:
     df_joined[col] = clean_percent(df_joined[col])
 
 
-# Convert strings like '0.89 kg' to float 0.89
+# -------------2d Convert strings like '0.89 kg' to float 0.89
 # remove kg in co2
 
 kg_cols = ["co₂ cost"]
@@ -220,9 +252,7 @@ def clean_kg(series):
 for col in kg_cols:
     df_joined[col] = clean_kg(df_joined[col])
 
-
-# import os
-# print(os.getcwd())
+# -------------2e  map symbols
 
 symbol_map = {
     "🟢": "open-source",
@@ -233,7 +263,93 @@ symbol_map = {
 df_joined["type"] = df_joined["type"].map(symbol_map).fillna("unknown")
 
 #df_joined.to_csv("df_joined_clean.csv", index=False)
+
+
+#----------------3 check if values lie in the expected range 
+
+# Rank must be positive
+bad_rank = df_joined.query("rank <= 0 or rank.isna()", engine="python")
+print(len(bad_rank))
+
+#Model size should be > 0 and < 70
+bad_size = df_joined.query("model_size <= 0 or model_size >= 80 or model_size.isna()", engine="python")
+print(len(bad_size))
+#display(bad_size[["model", "model_size"]])
+
+# scores bewteen 0-100
+score_cols = ["average", "ifeval", "bbh", "math", "gpqa", "musr", "mmlu-pro"]
+
+for col in score_cols:
+    if col in df_joined.columns:
+        invalid = df_joined[(df_joined[col] < 0) | (df_joined[col] > 100)]
+        if not invalid.empty:
+            print(f"{col}: {len(invalid)}")
+
+# co2 should be negative
+if "co₂ cost" in df_joined.columns:
+    bad_co2 = df_joined[df_joined["co₂ cost"] < 0]
+    print(len(bad_co2))
+
+# date check > 2022
+
+if "created_at" in df_joined.columns:
+    bad_dates = df_joined[
+        (df_joined["created_at"] < np.datetime64("2015-01-01")) |
+        (df_joined["created_at"] > np.datetime64("today"))
+        ]
+    print(len(bad_dates))
+
+
+#-------------------------- Identify outliers 
+
+# define the IQR bounds 
+def iqr_bounds(series, k=1.5):
+    q1 = series.quantile(0.25)
+    q3 = series.quantile(0.75)
+    iqr = q3 - q1
+    lower = q1 - k * iqr
+    upper = q3 + k * iqr
+    return lower, upper
+
+benchmark_cols = ["average", "ifeval", "bbh", "math", "gpqa", "musr", "mmlu-pro"]
+numeric_cols = ["rank", "model_size", "co₂ cost"] + [c for c in benchmark_cols if c in df_joined.columns]
+numeric_cols = [c for c in numeric_cols if c in df_joined.columns]
+print(numeric_cols)
+
+# display the bounds
+for col in numeric_cols:
+    s = df_joined[col].dropna()
+    if s.empty:
+        continue
+    lb, ub = iqr_bounds(s)
+    print(f"{col}: lower={lb:.2f}, upper={ub:.2f}")
+
+
+# here in Theory we can apply the IQR treatement using IQR clipping 
+# values outside the IQR willbe capped
+# we only have 40 rows so we will not apply the clipping since the large models will clipped
+# for col in numeric_cols:
+#     s = df_joined[col]
+#     if s.dropna().nunique() <= 1:
+#         continue
+#     lb, ub = iqr_bounds(s)
+#     df_joined[col] = s.clip(lower=lb, upper=ub)
+
+
+
+# -----------5 Enrich your dataset with at least one column
+
+#avg score per bilion parameters - can show performance per billion parm
+df_joined["score_per_billion"] = (df_joined["average"] / df_joined["model_size"]).round(2)
+
+
+# enviroment efficient models- expected that theythe bigger the model the more c02 consumtion
+df_joined["score_per_co2"] = (df_joined["average"] / df_joined["co₂ cost"]).round(2)
+
+
 df_joined.to_pickle("df_joined_clean.pkl")
+
+
 
 # ---------------- data exploration
 
@@ -259,7 +375,7 @@ COLORS = {
     "cat3": "#8DE5A1",       # category 3
 }
 
-
+#-----------------------------------------------------------------
 #distribution of model_size
 
 plt.figure(figsize=(8, 5))

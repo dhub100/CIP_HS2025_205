@@ -1,0 +1,14 @@
+---
+title: "Methods: Data Cleaning"
+format: html
+---
+
+The cleaning process standardized and merged the API and leaderboard datasets into a unified table (*df_joined*).
+
+Duplicate rows and missing values were checked. Model identifiers were normalized trough a custom cleaning function to ensure that both datasets can easily be joined.
+
+Missing *model_size* values were retrieved from HuggingFace model cards via a short code scraper, with one remaining value for *DialoGPT-medium* that was added manually.
+
+Dates were converted to *datetime*, percentage and CO₂ values were parsed into numeric format, and the *mode_size* variable was expressed in bilions for consistency. Symbolic type icons were mapped into categorigal labels. Data ranges were validated for plausibility. Outliers were identified using the IQR method; however, the values were retained due to true large values or bigger models.
+
+Finally we added, two new variables: *score per bilion parameters* for performance efficiency and score per kg CO₂ for enviromental efficiency. The resulting dataset wa saved as a *df_joned.pkl* for further analysis.
