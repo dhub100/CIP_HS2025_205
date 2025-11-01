@@ -7,24 +7,25 @@ from matplotlib.ticker import PercentFormatter
 
 df_all = pd.read_csv("huggingface_llm_metadata.csv")
 #df_100 = pd.read_csv("huggingface_100_llm_metadata.csv")
-df_lb = pd.read_csv("hf_leaderboard.csv")
+df_lb = pd.read_csv("hf_scraped.csv")
 
-df_all.duplicated().sum()
-df_lb.duplicated().sum()
+print(df_all.duplicated().sum())
+print(df_lb.duplicated().sum())
 
 
-# df_lb has duplicate rows
-duplicates=df_lb[df_lb.duplicated(keep=False)]
-duplicates.sort_values("Rank", ascending=True, inplace=True)
-print(duplicates)
+# df_lb had initally duplicate rows since this code is not needed - we commented it out
 
-# drop'em
+# duplicates=df_lb[df_lb.duplicated(keep=False)]
+# duplicates.sort_values("Rank", ascending=True, inplace=True)
+# print(duplicates)
 
-df_lb = df_lb.sort_values("Rank", ascending=True)
-df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
-df_lb.duplicated().sum() 
+# # drop'em
 
-# all cleaned 
+# df_lb = df_lb.sort_values("Rank", ascending=True)
+# df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
+# df_lb.duplicated().sum() 
+
+
 
 
 # this is not needed as in postitron you can see the data similar to R
@@ -34,7 +35,10 @@ print(df_all.isna().sum().sort_values(ascending=False).head(10))
 print(df_lb.isna().sum().sort_values(ascending=False).head(10))
 
 
-#intersections
+# df all does not have model size for 22 of the models, 
+# after join we will have to do scrape on the LLM dedicated pages for the model size
+
+#intersections - looking for columns with the same name
 
 print(set(df_all.columns).intersection(df_lb.columns))
 
@@ -51,14 +55,22 @@ def clean_model_name(series):
     )
 
 df_all["model"] = clean_model_name(df_all["modelId"])
-df_all.drop(columns=["modelId"], inplace=True)
+df_all.drop(columns=["modelId", "language", "pipeline_tag"], inplace=True)
 print(df_all.columns.tolist())
+df_all["created_at"] = pd.to_datetime(df_all["createdAt"]).dt.date
+df_all["last_modified"] = pd.to_datetime(df_all["lastModified"]).dt.date
+
+# language column will not be using so we droped language as well
+# pipeline tag variable is the same accross all models "text-generation" - drop
+# we extracted the date from createdAt and lastModifed columns
 
 
 df_lb["model"] = clean_model_name(df_lb["Model"])
-df_lb.drop(columns=["Model", "Unnamed: 11"], inplace=True, errors="ignore")
+df_lb.drop(columns=["Model", "Unnamed: 11", "Unnamed: 0"], inplace=True, errors="ignore")
 print(df_lb.columns.tolist())
 
+
+# Make all column names lower string
 
 df_all.columns = df_all.columns.str.lower()
 df_lb.columns = df_lb.columns.str.lower()
@@ -75,9 +87,9 @@ df_joined = pd.merge(
     how="inner"
 )
 
-df_joined = df_joined[["model", "model_type", "rank", "type"] 
-    + [c for c in df_joined.columns if c not in ["model", "model_type", "rank", "type"]]]
 
+df_joined = df_joined[["model", "model_type", "rank", "type"] 
+    + [c for c in df_joined.columns if c not in ["model", "model_type", "gated", "rank", "type"]]]
 
 
 # missing data 
@@ -90,8 +102,8 @@ df_joined.head(3).T
 
 #what models have the NA's since only a 10 we can list them
 
-na_rows = df_joined[df_joined["model_size"].isna() | df_joined["language"].isna()]
-na_rows_display = na_rows[["model", "model_size", "language"]]
+na_rows = df_joined[df_joined["model_size"].isna()]
+na_rows_display = na_rows[["model", "model_size"]]
 display(na_rows_display)
 
 
@@ -163,6 +175,10 @@ def clean_model_size(value):
 
 df_joined["model_size"] = df_joined["model_size"].apply(clean_model_size)
 
+# do another check 
+missing = df_joined[df_joined["model_size"].isna()]["model"]
+print(missing)
+
 #cannot find it so will add it manualy from here:
 #https://huggingface.co/microsoft/DialoGPT-medium
 df_joined.loc[df_joined["model"] == "microsoft/dialogpt-medium", "model_size"] = 0.147
@@ -216,75 +232,144 @@ symbol_map = {
 
 df_joined["type"] = df_joined["type"].map(symbol_map).fillna("unknown")
 
-df_joined.to_csv("df_joined_clean.csv", index=False)
+#df_joined.to_csv("df_joined_clean.csv", index=False)
+df_joined.to_pickle("df_joined_clean.pkl")
+
+# ---------------- data exploration
+
+import os
+os.makedirs("figures", exist_ok=True)
+
+# def to save figures
+
+def savefig(name):
+    plt.savefig(f"figures/{name}", dpi=300, bbox_inches="tight")
+    plt.close()
 
 
-
-
+# Define colors
 sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
-#plt.rcParams["figure.figsize"] = (8, 5)
+
+# ---- Define consistent pastel colors for reuse
+COLORS = {
+    "main": "#A1C9F4",       # blue (for numeric distributions)
+    "accent": "#FFB482",     # pastel orange (for scatter / highlights)
+    "cat1": "#A1C9F4",       # category 1
+    "cat2": "#FFB482",       # category 2
+    "cat3": "#8DE5A1",       # category 3
+}
+
 
 #distribution of model_size
 
 plt.figure(figsize=(8, 5))
-sns.boxplot(data=df_joined, x="model_size", color="skyblue")
+sns.boxplot(data=df_joined, x="model_size", color=COLORS["main"])
 plt.title("Distribution of Model Sizes")
 plt.xlabel("Model Size (Billions)")
+savefig("Dist_by_model_size_boxplot.png")
 plt.show()
+
 
 plt.figure(figsize=(8, 5))
 sns.histplot(df_joined["model_size"], bins=30, kde=True)
-
 plt.title("Distribution of Model Sizes (in billions)")
 plt.xlabel("Model Size (B)")
 plt.ylabel("Count")
+plt.savefig("figures/Dist_by_model_size_hist.png", dpi=300, bbox_inches='tight')
 plt.show()
-
+plt.close()
 #compare open-source vs proprietary models,
 
-
+# violin plot
 plt.figure(figsize=(8, 5))
 sns.violinplot(
     data=df_joined,
-    x="model_size",
+    x="type",
     y="average",
-    hue="type",              # your real grouping column
-    split=True,
+    hue="type", 
     inner="quart",
     palette="pastel",
-    linewidth=1
-)
-plt.title("Distribution of Average Score by Model Size and Type")
+     linewidth=1 )
+plt.title("Distribution of Average Score by Type")
 plt.xlabel("Model Size (B)")
 plt.ylabel("Average Score")
+plt.savefig("figures/avg_vs_size_violin.png", dpi=300, bbox_inches='tight')
 plt.show()
 
-# Averge vs Model-Size
 
-y = "average"       
-x = "model_size"
-
-plt.figure(figsize=(8,5))
-sns.scatterplot(data=df_joined, x=x, y=y, alpha=0.8)
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=df_joined,
+    x="model_size",
+    y="average",
+    color=COLORS["accent"],
+    alpha=0.7,
+    edgecolor="white",
+    s=80
+)
 plt.gca().yaxis.set_major_formatter(PercentFormatter(100))
-plt.title("Average vs Model Size")
+plt.title("Average Score vs Model Size")
+plt.xlabel("Model Size (Billions)")
+plt.ylabel("Average Score (%)")
+sns.despine()
+savefig("avg_vs_model_size_scatter.png")
 plt.show()
 
-plt.figure(figsize=(7,5))
-sns.regplot(data=df_joined, x=x, y=y, scatter_kws=dict(alpha=0.6), line_kws=dict(alpha=0.9))
+# regression line MOdel vs model size
+
+plt.figure(figsize=(8, 5))
+sns.regplot(
+    data=df_joined,
+    x="model_size",
+    y="average",
+    scatter_kws=dict(color=COLORS["accent"], alpha=0.6, s=70),
+    line_kws=dict(color=COLORS["cat2"], lw=2, alpha=0.8)
+)
 plt.gca().yaxis.set_major_formatter(PercentFormatter(100))
-plt.title("Average vs Model Size (Linear Fit)")
+plt.title("Average Score vs Model Size (Linear Fit)")
+plt.xlabel("Model Size (Billions)")
+plt.ylabel("Average Score (%)")
+sns.despine()
+savefig("avg_vs_model_size_regplot.png")
 plt.show()
+
+
+#log scale x-axis  - patterns should be more visible
+
+
+plt.figure(figsize=(8, 5))
+sns.scatterplot(
+    data=df_joined,
+    x="model_size",
+    y="average",
+    color=COLORS["accent"],
+    alpha=0.7,
+    edgecolor="white",
+    s=80
+)
+plt.xscale("log")
+plt.gca().yaxis.set_major_formatter(PercentFormatter(100))
+plt.title("Average Score vs Model Size (log scale)")
+plt.xlabel("Model Size (Billions, log10 scale)")
+plt.ylabel("Average Score (%)")
+sns.despine()
+savefig("avg_vs_model_size_log_scatter.png")
+plt.show()
+
+
+
+
 
 from plotnine import ggplot, aes, geom_point, geom_smooth, labs, theme_bw, scale_x_log10, facet_wrap
 # for LOESS pip install scikit-misc
+PASTEL_COLORS = ["#A1C9F4", "#FFB482", "#8DE5A1"]
 
-
-plt.figure(figsize=(7,5))
+plt.figure(figsize=(8,5))
+#p1 =
 (
     ggplot(df_joined, aes(x="model_size", y="average"))
-    + geom_point(alpha=0.5, color="steelblue")
-    + geom_smooth(method="loess", color="black", se=False)   # ggplot’s LOESS smoother
+    + geom_point(alpha=0.5, color="#A1C9F4")
+    + geom_smooth(method="loess", color="#FFB482", se=False)   # ggplot’s LOESS smoother
     + labs(
         title="Average Score vs Model Size (LOESS smoother)",
         x="Model Size (B)",
@@ -294,13 +379,17 @@ plt.figure(figsize=(7,5))
 )
 
 
+#p1.save("figures/avg_vs_model_size_loess.png", dpi=300, bbox_inches="tight")
+
 
 # used scale_x_log10 so we can plot better the small models
-plt.figure(figsize=(7,5))
+#LOESS
+plt.figure(figsize=(8,5))
+#p_log = 
 (
     ggplot(df_joined, aes(x="model_size", y="average"))
-    + geom_point(alpha=0.5, color="darkorange")
-    + geom_smooth(method="loess", color="black", se=False)
+    + geom_point(alpha=0.5, color="#A1C9F4")
+    + geom_smooth(method="loess", color="#FFB482", se=False)
     + scale_x_log10()
     + labs(
         title="Average Score vs Model Size (log scale)",
@@ -309,8 +398,16 @@ plt.figure(figsize=(7,5))
     )
     + theme_bw()
 )
+#p_log.save("figures/avg_vs_model_size_loess_log.png", dpi=300, bbox_inches="tight")
+
+# you can clearly see how performance changes across small and large models.
+
+# -------------correlation
+#we calculate the Pearson correlation between model size and average score
 
 df_joined[["model_size", "average"]].corr()
+
+#correlation is 0.75 so the bigger the model, the higher the averge score
 
 import statsmodels.api as sm
 
@@ -318,6 +415,43 @@ X = sm.add_constant(df_joined["model_size"])
 y = df_joined["average"]
 model = sm.OLS(y, X).fit()
 print(model.summary())
+
+# The intercept (13.54) is the expected average score (in %) when the model size is 0 B (not meaningful)
+# The slope is 0.45 meaning that for every 1 bilion parameter increase
+#                             the average score increase with approx 0.45 points
+# p <0.001 so it is statistically significant
+# Larger models tend to achieve higher average benchmark scores
+# model size alone explains roughly half of the performance variation. Rsq = 0.56
+
+# FITTED REGRESSION LINE
+
+plt.figure(figsize=(8,5))
+sns.scatterplot(
+    data=df_joined,
+    x="model_size",
+    y="average",
+    color="#A1C9F4",
+    alpha=0.7,
+    s=80,
+    edgecolor="white"
+)
+# Regression line
+X = sm.add_constant(df_joined["model_size"])
+y = df_joined["average"]
+model = sm.OLS(y, X).fit()
+pred = model.predict(X)
+plt.plot(df_joined["model_size"], pred, color="#FFB482", lw=2, label="OLS Fit")
+plt.title("Average Score vs Model Size (OLS Fit)")
+plt.xlabel("Model Size (Billions)")
+plt.ylabel("Average Score (%)")
+plt.legend()
+sns.despine()
+plt.savefig("figures/avg_vs_model_size_OLSfit.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+
+
+
 
 
 
@@ -329,109 +463,45 @@ prop = df_joined.loc[df_joined["type"].str.contains("prop", case=False, na=False
 t_stat, p_val = ttest_ind(open_src, prop, equal_var=False)
 print(f"T-statistic: {t_stat:.3f},  p-value: {p_val:.4f}")
 
+# There is no significant difference in average benchmark scores between open-source and proprietary models
 
-
-
-# we can clearly see thatthe bigger the model the higher the average score
-
-# faceting by type
-
-
-plt.figure(figsize=(7,5))
-(
-    ggplot(df_joined, aes(x="model_size", y="average"))
-    + geom_point(alpha=0.6, color="coral")
-    #+ geom_smooth(method="lm", color="black", se=False)
-    # CANNOT DO LOESS BECAUSE NOT ENOUGH POINTS.
-    #+ geom_smooth(method="loess", color="black", se=False)
-    + facet_wrap("~ type")        # or "~ model_type"
-    + scale_x_log10()
-    + labs(
-        title="Average Score vs Model Size by Type (log scale)",
-        x="Model Size (log10 Billions)",
-        y="Average Score (%)"
-    )
-    + theme_bw()
-)
- # CANNOT DO FACET WRAP WITH SMOOTHER OR lm BECAUSE NOT ENOUGH POINTS.
 
 
 import plotly.express as px
 
+# Define pastel color map consistent with all plots
+PASTEL_BLUE = COLORS["main"] if "COLORS" in globals() else "#A1C9F4"
 
-
-fig = px.scatter(
-    df_joined,
+g = sns.relplot(
+    data=df_joined,
     x="model_size",
     y="average",
-    color="type",
-    color_discrete_map={
-        "open-source": "green",
-        "chat/dialogue model": "orange",
-        "restricted/proprietary": "red"
-    },
-    hover_name="model",
-    hover_data={
-        "model_size": True,
-        "average": True,
-        "type": True
-        },
-    size="downloads" if "downloads" in df_joined.columns else None,
-    log_x=True,
-    title="Avg. Score vs Model Size (scale by nr. of downloads) - interactive"
+    col="type",
+    kind="scatter",
+    color=PASTEL_BLUE,
+    alpha=0.7,
+    height=4,
+    aspect=1.1,
+    col_wrap=3
 )
 
-# Move legend inside top-left
-fig.update_layout(
-    legend=dict(
-        x=0.02,            # distance from left edge (0 = left, 1 = right)
-        y=0.98,            # distance from bottom (1 = top)
-        bgcolor="rgba(255,255,255,0.6)",  # translucent white background
-        bordercolor="black",
-        borderwidth=1
-    ),
-    xaxis_title="Model Size (Billions, log scale)",
-    yaxis_title="Average Score (%)",
-    template="plotly_white"
-)
+# Log scale + percent formatter + tidy titles/labels
+for ax in g.axes.flatten():
+    ax.set_xscale("log")
+    ax.yaxis.set_major_formatter(PercentFormatter(100))
+    ax.set_xlabel("Model Size (Billions, log10)")
+    ax.set_ylabel("Average Score (%)")
 
-fig.show()
+g.set_titles(col_template="{col_name}")
+g.figure.suptitle("Average Score vs Model Size by Type (log scale)", y=1.03)
+sns.despine()
+
+# Save the whole faceted figure
+g.figure.savefig("figures/avg_vs_size_by_type_facets.png", dpi=300, bbox_inches="tight")
+plt.show()
 
 
 # buble size based on Model_size - does not make sense because you cannot see the smaller bubles
-# fig = px.scatter(
-#     df_joined,
-#     x="model_size",
-#     y="average",
-#     size="model_size",              
-#     color="type",
-#     hover_name="model",
-#     hover_data={
-#         "model_size": True,
-#         "average": True,
-#         "type": True
-#     },
-#     log_x=True,
-#     title="Average Score vs Model Size (bubbles scaled by model size)"
-# )
-
-# fig.update_layout(
-#     legend=dict(
-#         x=0.02,
-#         y=0.98,
-#         bgcolor="rgba(255,255,255,0.6)",
-#         bordercolor="black",
-#         borderwidth=1
-#     ),
-#     xaxis_title="Model Size (Billions, log scale)",
-#     yaxis_title="Average Score (%)",
-#     template="plotly_white"
-# )
-
-# # Optional: scale bubble size range for better readability
-# fig.update_traces(marker=dict(sizeref=2.*max(df_joined["model_size"])/(40**2), sizemode='area'))
-
-# fig.show()
 
 
 
@@ -448,11 +518,18 @@ eff_top = (
 display(eff_top)
 
 
-plt.figure(figsize=(8,5))
-sns.boxplot(data=df_joined, x="type", y="score_per_b", palette="pastel")
+plt.figure(figsize=(8, 5))
+sns.boxplot(
+    data=df_joined,
+    x="type",
+    y="score_per_b",
+    palette="pastel"
+)
 plt.title("Score per Billion Parameters by Model Type")
 plt.xlabel("Model Type")
 plt.ylabel("Score per Billion Parameters")
+sns.despine()
+savefig("score_per_billion_by_type_boxplot.png")
 plt.show()
 
 #this makes sense because the proprietary are bigger models more CO2 consumed not a very usefull metric anyway
