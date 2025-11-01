@@ -34,6 +34,8 @@ This class-based scraper extracts benchmark data for LLM models from the [Huggin
 6. Writes header (first model only) and values to CSV
 7. Closes browser to avoid session conflicts
 
+Remarks: The scraping of HuggingFace website is totally allowed as there is no `robot.txt` file mentioned.
+
 ### Setup
 
 #### **Browser Driver:**
