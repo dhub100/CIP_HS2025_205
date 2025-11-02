@@ -7,9 +7,14 @@ format: html
 
 #### Motivation
 
-The motivation for this project originates from the fast-paced development of Large Language Models (LLMs) and the need to better understand and compare their properties beyond benchmark performance alone. While platforms such as Hugging Face provide extensive access to open-source models, relevant information about their usage, efficiency, and popularity remains dispersed across multiple sources. This project therefore aims to consolidate data from the Hugging Face API and leaderboards to enable a more holistic view of the LLM landscape - including aspects such as model size, popularity (e.g., likes), and environmental impact (CO₂ consumption). By combining these data dimensions, the project seeks to contribute to a more transparent and data-driven understanding of modern LLMs.
+The motivation for this project originates from the fast-paced development of **Large Language Models** (LLMs) and the need to better understand and compare their properties **beyond benchmark performance** alone. While platforms such as Hugging Face provide extensive access to open-source models, relevant information about their usage, efficiency, and popularity remains dispersed across multiple sources.
+
+This project therefore aims to **consolidate data from the Hugging Face API and leaderboards** to enable a more holistic view of the LLM landscape - including aspects such as model size, popularity (e.g., likes), and environmental impact (CO₂ consumption). By combining these data dimensions, the project seeks to contribute to a **more transparent and data-driven understanding** of modern LLMs.
 
 #### Research and Learning Objectives
 
-The project’s overarching goal is both analytical and methodological. From a research perspective, it aims to explore how various model characteristics - such as popularity, efficiency, and benchmark performance - relate to each other. Instead of focusing solely on cost measures like *price per token*, the analysis investigates relationships such as overall benchmark scores in relation to model size or model likes in relation to CO₂ consumption.\
-From a learning perspective, the project focuses on developing a complete data science workflow: collecting data through APIs and web scraping, merging and cleaning heterogeneous datasets, and visualizing and statistically modeling the resulting data. This process not only enhances technical skills in data handling and automation but also promotes critical reflection on data quality, comparability, and the interpretability of AI model metrics.
+The project’s overarching goal is both **analytical** and **methodological**.
+
+From a **research perspective**, it aims to explore how various model characteristics - such as popularity, efficiency, and benchmark performance - relate to each other. Instead of focusing solely on cost measures like *price per token*, the analysis investigates relationships such as overall benchmark scores in relation to model size or model likes in relation to CO₂ consumption.
+
+From a **learning perspective**, the project focuses on developing a complete data science workflow: collecting data through APIs and web scraping, merging and cleaning heterogeneous datasets, and visualizing and statistically modeling the resulting data. This process not only enhances technical skills in data handling and automation but also promotes critical reflection on data quality, comparability, and the interpretability of AI model metrics.
