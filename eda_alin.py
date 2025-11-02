@@ -257,17 +257,28 @@ for col in kg_cols:
     df_joined[col] = clean_kg(df_joined[col])
 
 # -------------2e  map symbols
+# documentation for symbol map is here:
+# https://huggingface.co/docs/leaderboards/en/open_llm_leaderboard/about?utm_source=chatgpt.com
 
 symbol_map = {
-    "🟢": "open-source",
-    "💬": "chat",
-    "🔶": "proprietary"
+    "🟢": "pretrained",
+    "💬": "chat/dialogue",
+    "🔶": "fine_tuned"
 }
 
-df_joined["type"] = df_joined["type"].map(symbol_map).fillna("unknown")
+df_joined["model_scope"] = df_joined["type"].map(symbol_map).fillna("unknown")
 
-#df_joined.to_csv("df_joined_clean.csv", index=False)
+# documentation for gated - we will map gated as proprietary
+#https://huggingface.co/docs/hub/en/models-gated?utm_source=chatgpt.com
 
+df_joined["access type"] = np.where(df_joined["gated"] == "False", "open-source",
+                    np.where(df_joined["gated"] == "manual", "proprietry",
+                    df_joined["gated"]
+                    )
+
+                )
+
+df_joined.drop(columns = ["type", "gated"], inplace=True)
 
 #----------------3 check if values lie in the expected range 
 
