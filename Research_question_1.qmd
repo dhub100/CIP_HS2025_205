@@ -50,7 +50,8 @@ To explore which models offer the best size-to-performance ratio, we examined th
 ```{python}
 #| label: avg_benchmark_vs_size_loess
 #| echo: false
-#| fig-cap: "Figure1: Average benchmark score vs. model size with LOESS smoother (log10 scale)"
+#| warning: false
+#| fig-cap: "Figure1: Average benchmark score vs. model size with LOESS smoother"
 
 
 from plotnine import ggplot, aes, geom_point, geom_smooth, labs, theme_bw, scale_x_log10
@@ -95,7 +96,7 @@ print(f"The resulting coefficient (r ≈ {corr:.2f}) confirms the strong positiv
 
 
 benchmark_cols = [
-    "model", "model_size", "average"]
+    "model", "model_size", "average", "score_per_billion"]
 available_cols = [c for c in benchmark_cols if c in df_joined.columns]
 
 # Sort by model_size (descending)

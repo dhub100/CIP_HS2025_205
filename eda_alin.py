@@ -76,7 +76,7 @@ df_all.drop(columns=["modelId", "language", "pipeline_tag"], inplace=True)
 print(df_all.columns.tolist())
 
 
-# language column will not be using so we droped language as well
+# language column will not be used - so we droped language as well
 # pipeline tag variable is the same accross all models "text-generation" - drop
 # we extracted the date from createdAt and lastModifed columns
 
@@ -175,6 +175,7 @@ print(missing)
 
 #cannot find it so will add it manualy from here:
 #https://huggingface.co/microsoft/DialoGPT-medium
+df_joined["model"] = df_joined["model"].astype(str).str.strip()
 df_joined.loc[df_joined["model"] == "microsoft/dialogpt-medium", "model_size"] = 0.147
 
 
@@ -272,7 +273,7 @@ df_joined["model_scope"] = df_joined["type"].map(symbol_map).fillna("unknown")
 #https://huggingface.co/docs/hub/en/models-gated?utm_source=chatgpt.com
 
 df_joined["access type"] = np.where(df_joined["gated"] == "False", "open-source",
-                    np.where(df_joined["gated"] == "manual", "proprietry",
+                    np.where(df_joined["gated"] == "manual", "proprietary",
                     df_joined["gated"]
                     )
 
@@ -342,7 +343,8 @@ for col in numeric_cols:
 
 # here in Theory we can apply the IQR treatement using IQR clipping 
 # values outside the IQR will be capped
-# we only have 40 rows so we will not apply the clipping since the large models will be clipped
+# we only have 42 rows so we will not apply the clipping since the large models will be clipped
+
 # for col in numeric_cols:
 #     s = df_joined[col]
 #     if s.dropna().nunique() <= 1:
@@ -601,37 +603,51 @@ print(f"T-statistic: {t_stat:.3f},  p-value: {p_val:.4f}")
 import plotly.express as px
 
 # Define pastel color map consistent with all plots
-PASTEL_BLUE = COLORS["main"] if "COLORS" in globals() else "#A1C9F4"
+color_map = {
+    "open-source": "#A1C9F4",  
+    "proprietary": "#8DE5A1"   
+}
 
-g = sns.relplot(
-    data=df_joined,
+
+fig = px.scatter(
+    df_plot,
     x="model_size",
     y="average",
-    col="type",
-    kind="scatter",
-    color=PASTEL_BLUE,
-    alpha=0.7,
-    height=4,
-    aspect=1.1,
-    col_wrap=3
+    color="access type",
+    color_discrete_map=color_map,
+    hover_name="model",
+    hover_data=["access type", "average", "model_size"],
+    title="Average Score vs. Model Size by Access Type"
 )
 
-# Log scale + percent formatter + tidy titles/labels
-for ax in g.axes.flatten():
-    ax.set_xscale("log")
-    ax.yaxis.set_major_formatter(PercentFormatter(100))
-    ax.set_xlabel("Model Size (Billions, log10)")
-    ax.set_ylabel("Average Score (%)")
+# Fit LOESS using statsmodels
+lowess = sm.nonparametric.lowess
+loess_fit = lowess(df_plot["average"], df_plot["model_size"], frac=0.5)
+x_loess, y_loess = loess_fit[:, 0], loess_fit[:, 1]
 
-g.set_titles(col_template="{col_name}")
-g.figure.suptitle("Average Score vs Model Size by Type (log scale)", y=1.03)
-sns.despine()
+# Add LOESS curve (drawn last, so it stays on top)
+fig.add_trace(
+    go.Scatter(
+        x=x_loess,
+        y=y_loess,
+        mode="lines",
+        line=dict(color="#FFB482", width=3),
+        name="LOESS smoother"
+    )
+)
 
-# Save the whole faceted figure
-g.figure.savefig("figures/avg_vs_size_by_type_facets.png", dpi=300, bbox_inches="tight")
-plt.show()
+# Clean layout
+fig.update_layout(
+    template="simple_white",
+    title_x=0.05,
+    font=dict(size=14),
+    legend_title_text="Access Type"
+)
+fig.update_traces(opacity=0.75)
+plt.savefig("avg_vs_mode_size_interactive.png", dpi=300, bbox_inches="tight")
+fig.show()
 
-
+# does not render LOESS so will not be using this for Q1
 # buble size based on Model_size - does not make sense because you cannot see the smaller bubles
 
 

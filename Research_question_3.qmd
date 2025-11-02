@@ -1,0 +1,229 @@
+---
+format:
+  html:
+    code-fold: true
+
+---
+
+
+
+```{python}
+#| label: packages
+#| requirements: ["pandas", "numpy", "matplotlib", "seaborn"]
+#| echo: false
+
+import os
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from matplotlib.ticker import PercentFormatter
+from scipy.stats import ttest_ind
+
+```
+
+```{python}
+#| label: import
+#| echo: false
+
+# import file
+df_joined = pd.read_pickle("df_joined_clean.pkl")
+
+
+#colors
+sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
+COLORS = {
+    "main": "#A1C9F4",
+    "accent": "#FFB482",
+    "cat3": "#8DE5A1"
+}
+
+
+```
+
+## Q 2 – How do *open-source* models differ from *proprietary* ones in terms of performance?
+
+### Average benchmark score by access type comparison
+
+To examine whether model accessibility influences performance, we compared the average benchmark scores of open-source and proprietary large language models (LLMs).  
+Because absolute accuracy values can be hard to interpret in isolation, a practical performance threshold was introduced as a visual reference.
+
+::: {.callout-note collapse = "true" title = "Community Convention"}
+Following the community convention used on the [Hugging Face Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard), we define *practical accuracy* as achieving an average benchmark score above *25%*. 
+The approximate level at which models begin to demonstrate consistent reasoning and instruction-following capabilities across diverse evaluation tasks.  
+This threshold does not represent a strict pass/fail cut-off but serves as an informative benchmark.  
+:::
+```{python}
+#| label: avg_score_threshold_plotly
+#| echo: false
+
+#| fig-width: 6
+#| fig-height: 3
+
+import plotly.express as px
+import plotly.graph_objects as go
+
+# Clean and prepare data
+df_plot = df_joined.dropna(subset=["average", "access type", "model_size"]).copy()
+
+# Define pastel colors
+color_map = {
+    "open-source": "#A1C9F4",
+    "proprietary": "#8DE5A1"
+}
+
+# Create Plotly strip plot
+fig = px.strip(
+    df_plot,
+    x="access type",
+    y="average",
+    color="access type",
+    color_discrete_map=color_map,
+    hover_name="model",
+    hover_data={
+        "average": True,
+        "model_size": True,
+        "access type": False
+    },
+    title="Average Benchmark Score by Access Type (interactive)"
+)
+
+# threshold line
+fig.add_hline(
+    y=25,
+    line_dash="dash",
+    line_color="gray",
+    line_width=2,
+    annotation_text="25% Practical Threshold",
+    annotation_position="top left"
+)
+
+# jitter
+fig.update_traces(
+    jitter=0.3,
+    opacity=0.85,
+    marker=dict(size=9, line=dict(width=0))
+)
+
+fig.update_layout(
+    template="simple_white",
+    font=dict(size=13),
+    title_x=0.05,
+    legend_title_text="Access Type",
+    yaxis_title="Average Score (%)",
+    xaxis_title="Access Type",
+    height=400,
+    width=600,
+    hoverlabel=dict(bgcolor="white", font_size=12)
+)
+
+fig.show()
+
+
+
+```
+
+Each dot represents a model, color-coded by access type, with hover information displaying the model’s name and size.  
+The dashed gray line marks the 25% threshold, indicating the onset of consistent reasoning ability observed in community benchmarks.  
+While proprietary models more frequently exceed this level, several open-source models approach or surpass it—suggesting that performance parity between open and proprietary ecosystems is increasingly attainable.
+
+
+### Task-Level Benchmark Comparison
+
+To compare the permoance between *open-source* and *proprietary* models across the evaluation tasks, we analized the six benchmark metrics.
+In figure 3 we vizualize the distribution of score for each benchmark using boxplots and grouping the model by *access type*
+
+```{python}
+#| label: per_task_boxplots
+#| echo: false
+#| fig-cap: "Task-level performance distributions by access type"
+#| fig-width: 8
+#| fig-height: 3.5
+
+tasks = [c for c in ["ifeval","mmlu-pro","math","gpqa","bbh","musr"] if c in df_joined.columns]
+n = len(tasks)
+
+fig, axes = plt.subplots(1, n, figsize=(3.5*n, 3.5), constrained_layout=True)  
+axes = axes.flatten()
+
+palette = {"open-source": "#A1C9F4", "proprietary": "#8DE5A1"}
+
+for i, col in enumerate(tasks):
+    sns.boxplot(
+        data=df_joined,
+        x="access type",
+        y=col,
+        hue="access type",
+        palette=palette,
+        legend=False,
+        ax=axes[i]
+    )
+    axes[i].set_xlabel("")
+    axes[i].set_ylabel(f"{col} (%)")
+    axes[i].set_title(col.upper())
+
+
+for j in range(i+1, len(axes)):
+    axes[j].axis("off")
+
+plt.show()
+
+```
+
+Except *MUSR* proprietary models show higher medians particualry for *IFEVAL* and *MMLU-PRO*, though overlapping interquartile ranges for the other metrics indicatethat some of the *open-surce* models would perform similary as the *proprietary* models.
+
+
+### Statistical test
+
+To assess whether there is a statistically significant difference in performance between *open-source* and *proprietary* models, we conducted a *Welch’s t-test* on the average benchmark scores.  
+This test was chosen because it does *not assume equal variances or sample sizes* between groups, as it is reflected in this dataset. Proprietary models are fewer but sometimes larger.  
+
+The Welch’s t-test compares mean benchmark scores between *open-source *and *proprietary *models without assuming equal variance. The result (t = -1.76, p = 0.09) indicates no statistically significant difference between the two groups.
+
+::: {.callout-note collapse = "true" title = "Welch t-test summary"}
+```{python}
+#| label: welch_ttest_avg
+#| echo: true
+
+
+
+
+d = df_joined.dropna(subset=["average","access type"]).copy()
+
+open_avg = d.loc[d["access type"]=="open-source","average"].astype(float)
+prop_avg = d.loc[d["access type"]=="proprietary","average"].astype(float)
+
+t, p = ttest_ind(open_avg, prop_avg, equal_var=False)
+
+print(f"Welch’s t-test result: t = {t:.2f}, p = {p:.2f}")
+
+
+```
+
+:::
+
+To control for differences in model size, we performed an *Analysis of Covariance (ANCOVA)* with `average` benchmark score as the dependent variable, `log10(model_size)` as a covariate, and `access type` as a categorical predictor.    
+
+
+```{python}
+#| label: ancova_avg
+#| echo: false
+#| output: asis-
+#| code-fold: true
+
+import numpy as np
+import statsmodels.formula.api as smf
+
+dd = df_joined.dropna(subset=["average","model_size","access type"]).copy()
+dd["log_size"] = np.log10(dd["model_size"].astype(float))
+
+m = smf.ols("average ~ log_size + C(Q('access type'))", data=dd).fit()
+print(m.summary().tables[1])  # coefficient table only
+
+
+```
+
+The ANCOVA results show that *larger models consistently achieve higher benchmark scores*, while whether a model is open-source or proprietary makes no measurable difference.  
+When model size is expressed on a log scale, *every ten-fold increase in parameters is linked to about a 13-point rise in average benchmark performance.*  
+
+In other words, model scale rather than licensing status is the main factor driving performance differences across the models analyzed.
