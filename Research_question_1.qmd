@@ -59,7 +59,7 @@ from plotnine import ggplot, aes, geom_point, geom_smooth, labs, theme_bw, scale
 p=(
     ggplot(df_joined, aes(x="model_size", y="average"))
     + geom_point(alpha=0.30, color=COLORS["main"])
-    + geom_smooth(method="loess", color=COLORS["accent"], se=False)
+    + geom_smooth(method="loess", span=0.9, color=COLORS["accent"], se=False)
     + labs(
     title="Average Score vs Model Size (LOESS smoother)",
     x="Model Size (B)",

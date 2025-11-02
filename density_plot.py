@@ -2,10 +2,9 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import numpy as np
 from matplotlib.colors import LinearSegmentedColormap
 
-df = pd.read_csv('df_joined_clean.csv')
+df = pd.read_pickle("df_joined_clean.pkl")
 # print(df.shape)
 # print(df.head())
 
@@ -52,12 +51,18 @@ sns.scatterplot(
     alpha=0.6
 )
 
-# zone of best in class llms
+# manually annotate three interesting models
+plt.text(2, 0.0108, "mistralai/mistral-7b-v0.1", fontsize=9, weight="bold", color="#4CAF50")
+plt.text(3, 0.0061, "meta-llama/llama-2-7b-chat-hf", fontsize=9, weight="bold", color="black")
+plt.text(52, 0.0037, "meta-llama/llama-3.3-70b-instruct", fontsize=9, weight="bold", color="#FFB482")
 
+
+# zone of best in class llms
+ax = plt.gca()
 zone = patches.Rectangle(
     (df["co₂ cost"].min(), df["likes_per_download"].quantile(0.5)),   # lower left corner
     df["co₂ cost"].quantile(0.5) - df["co₂ cost"].min(),             # width
-    df["likes_per_download"].max() - df["likes_per_download"].quantile(0.5),  # height
+    ax.get_ylim()[1] - df["likes_per_download"].quantile(0.5),  # height
     linewidth=1.8,
     edgecolor="#4CAF50",   # kräftiges Grün
     facecolor="#4CAF50",

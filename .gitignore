@@ -1,9 +1,32 @@
+# --- Python ---
 .venv/
-.idea
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .Python
+
+# --- IDE ---
+.idea/
+.vscode/
+
+# --- Quarto & Jupyter artifacts ---
+*_cache/
+*_files/
+*_resources/
+_site/
+.DS_Store
+
+# --- Large or temporary data ---
+*.pkl
+*.csv
+*.xlsx
+*.json
+*.log
+
+# --- Keep HTML reports but ignore their dependencies ---
+!*.html
+
+# --- Project-specific ---
 huggingface_llm_metadata.xlsx
 top_llms.txt

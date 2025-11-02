@@ -1,0 +1,124 @@
+---
+format:
+  html:
+    code-fold: true
+---
+
+```{python}
+#| label: packages
+#| echo: false
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.colors import LinearSegmentedColormap
+
+```
+
+```{python}
+#| label: Dataprep
+#| echo: false
+
+df = pd.read_pickle("df_joined_clean.pkl")
+# print(df.shape)
+# print(df.head())
+
+# Calculate likes per download
+
+df["likes_per_download"] = df["likes"] / df["downloads"].replace(0, pd.NA)
+# df["likes_per_download"].describe()
+
+```
+
+## Q2 – Which models are the most cost-effective?
+
+### Research question
+
+In this section, we focus not on the financial costs of model use for end users, but on the **environmental costs** that each model incurs during its lifecycle and inference. The variable *CO₂ cost* represents the ecological footprint of a model and therefore serves as a proxy for its sustainability. Instead of relying on classical benchmark metrics to capture model performance, we chose to use **user likes** as a more holistic measure of perceived usefulness. User feedback tends to integrate multiple aspects of model quality — not only accuracy, but also usability, documentation quality, and community engagement.
+
+### Method and visualization
+
+To make models comparable in terms of their popularity and acceptance, we normalize the number of likes by the number of downloads, resulting in the metric *likes per download*. This ratio expresses how well a model is received relative to its overall adoption and mitigates the bias towards more widely distributed models. Other normalization methods would also have been feasible.\
+We then visualize the joint distribution of *CO₂ cost* and *likes per download* using a **bivariate kernel density estimate (KDE)** overlaid with individual data points. Compared to a heatmap, this continuous representation avoids discretization into bins and better reveals the overall structure of the data — particularly useful given our relatively small sample size.\
+The plot also includes a highlighted *“Balanced Best Zone”*, defined as the intersection of the 50% of models with the **lowest CO₂ costs** and the 50% with the **highest likes per download**. This region indicates models that balance sustainability and user appreciation most effectively.
+
+```{python}
+#| label: density_plot_likes_per_download_vs_co2_cost
+#| echo: false
+
+# Set seaborn theme
+sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
+
+# Color for the density plot
+
+blue = "#A1C9F4"
+
+white_to_blue = LinearSegmentedColormap.from_list(
+    "white_to_blue",
+    [
+        (0.0, "#F8FBFE"),   # fast weiß (aber nicht ganz)
+        (0.1, "#D6E7FA"),   # hellblau bleibt länger
+        (0.2, "#B4D3F7"),   # mittleres Pastellblau
+        (1.0, blue),        # kräftiges Blau im Zentrum
+    ]
+)
+# Density plot with scatter overlay
+
+plt.figure(figsize=(8, 5))
+sns.kdeplot(
+    x=df["co₂ cost"],
+    y=df["likes_per_download"],
+    fill=True,
+    cmap=white_to_blue,
+    alpha=0.6,
+    levels=20,
+    thresh=0,
+    cut=1
+)
+plt.xlim(0, 80)
+sns.scatterplot(
+    x=df["co₂ cost"],
+    y=df["likes_per_download"],
+    color="black",
+    s=25,
+    alpha=0.6
+)
+
+# manually annotate three interesting models
+plt.text(2, 0.0108, "mistralai/mistral-7b-v0.1", fontsize=9, weight="bold", color="#4CAF50")
+plt.text(3, 0.0061, "meta-llama/llama-2-7b-chat-hf", fontsize=9, weight="bold", color="black")
+plt.text(52, 0.0037, "meta-llama/llama-3.3-70b-instruct", fontsize=9, weight="bold", color="#FFB482")
+
+
+# zone of best in class llms
+ax = plt.gca()
+zone = patches.Rectangle(
+    (df["co₂ cost"].min(), df["likes_per_download"].quantile(0.5)),   # lower left corner
+    df["co₂ cost"].quantile(0.5) - df["co₂ cost"].min(),             # width
+    ax.get_ylim()[1] - df["likes_per_download"].quantile(0.5),  # height
+    linewidth=1.8,
+    edgecolor="#4CAF50",   # kräftiges Grün
+    facecolor="#4CAF50",
+    alpha=0.25,
+    label="Ballanced best zone"
+)
+
+ax = plt.gca()
+ax.add_patch(zone)
+
+plt.xlabel("CO2-Cost")
+plt.ylabel("Likes / Download")
+plt.title("Density distribution 'Likes / Download' vs. 'CO2 costs'")
+plt.legend(loc="upper right")
+plt.tight_layout()
+plt.show()
+
+
+```
+
+### Findings and interpretation
+
+The resulting density distribution shows that the majority of models on Hugging Face are concentrated within a relatively narrow and **low CO₂ cost range**, which suggests that most frequently downloaded models are also computationally efficient - which makes intuitive sense, given that many users operate with limited computing resources and very large models may not run as intended on their hardware.\
+However, a few **large-scale outliers** with substantially higher emissions stand out, indicating that scaling still comes with significant environmental costs.\
+In terms of user perception, approximately half of the models achieve only modest *likes per download* values, while a smaller subset clearly distinguishes itself through much higher user approval. The models inside the green *Balanced Best Zone* combine both desirable properties - **low ecological footprint** and **high user value**. These can be considered *best-in-class models* that demonstrate that high perceived quality and sustainable model design are not mutually exclusive.\
+Overall, the analysis highlights that there is **a non-trivial subset of models that achieve strong user satisfaction without excessive environmental impact**, pointing to promising directions for future model optimization and dissemination.
