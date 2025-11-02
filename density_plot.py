@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib.colors import LinearSegmentedColormap
 
-df = pd.read_csv('df_joined_clean.csv')
+df = pd.read_pickle("df_joined_clean.pkl")
 # print(df.shape)
 # print(df.head())
 
