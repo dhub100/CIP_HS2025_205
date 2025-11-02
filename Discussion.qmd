@@ -1,0 +1,25 @@
+---
+title: "Conclusion"
+format: html
+---
+
+## Learnings
+
+## Limitations
+
+A significant limitation is the sample size, partly due to our scraping method.
+[HuggingFace Open Leaderboard](#https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard#/) can display 4756 models as of early November 2025.
+However, we only scrape models from the API.
+Scraping the entire table would’ve been more challenging but would’ve allowed us to gather more benchmark observations, likely available through the API too.
+
+This limited sample size drives multiple others:
+
+Trends are unclear as we miss part of the picture. For instance, on @avg_benchmark_vs_size_loess we cannot draw conclusions about models with over 20 billion parameters.
+Analysis is limited; only statistical methods work efficiently with few data points.
+Lastly, conclusions and interpretations are uncertain.
+
+
+## Future steps
+
+A clear futur step would be to improve the scraping algorithm to be able to handle the scrollable feature of the table, hence enabling us to collect many more observations.
+Afterwards, we could undertake more thorough analysis.
