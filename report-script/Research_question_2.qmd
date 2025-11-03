@@ -19,7 +19,7 @@ from matplotlib.colors import LinearSegmentedColormap
 #| label: Dataprep
 #| echo: false
 
-df = pd.read_pickle("df_joined_clean.pkl")
+df = pd.read_pickle("data/final/df_joined_clean.pkl")
 # print(df.shape)
 # print(df.head())
 
