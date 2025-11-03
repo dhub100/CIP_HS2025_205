@@ -61,7 +61,7 @@ The resulting dataset is incrementally written and shares a common identifier (`
 ```{python}
 #| label: import
 
-df_joined = pd.read_pickle(Path("data", "final", "df_joined_clean.pkl"))
+df_joined = pd.read_pickle(Path("../data", "final", "df_joined_clean.pkl"))
 
 #colors
 sns.set_theme(style="ticks", palette="pastel", font_scale=1.1)
