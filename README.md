@@ -29,7 +29,7 @@ api = HuggingFaceAPI()
 models = api.get_top_models(limit=100)
 df = api.get_model_metadata(models)
 df["model_size"] = df["modelId"].apply(api.extract_model_size)
-df.to_csv("huggingface_100_llm_metadata.csv", index=False)
+df.to_csv("data/raw/huggingface_100_llm_metadata.csv", index=False)
 ```
 
 ### Output
@@ -89,15 +89,15 @@ from hf_scrape import HFLeaderboardScraper
 scraper = HFLeaderboardScraper(browser="safari")
 
 # Define models to scrape, by loading the API data collected.
-api_data = pd.read_csv("huggingface_100_llm_metadata.csv")
+api_data = pd.read_csv("data/raw/huggingface_100_llm_metadata.csv")
 models = api_data.modelId.values
 
 # Scrape models and write to CSV
-scraper.scrape_models(models, to_file="output.csv")
+scraper.scrape_models(models, to_file="data/raw/hf_leaderboard.csv")
 
 # Add more models to existing file
 more_models = ["google/gemma-7b"]
-scraper.scrape_models(more_models, to_file="output.csv")
+scraper.scrape_models(more_models, to_file="data/raw/hf_leaderboard.csv")
 ```
 
 ### Output

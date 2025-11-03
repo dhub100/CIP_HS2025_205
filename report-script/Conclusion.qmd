@@ -18,7 +18,6 @@ Trends are unclear as we miss part of the picture. For instance, on @avg_benchma
 Analysis is limited; only statistical methods work efficiently with few data points.
 Lastly, conclusions and interpretations are uncertain.
 
-
 ## Future steps
 
 A clear futur step would be to improve the scraping algorithm to be able to handle the scrollable feature of the table, hence enabling us to collect many more observations.

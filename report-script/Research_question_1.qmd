@@ -27,7 +27,7 @@ import os
 #| echo: false
 
 # import file
-df_joined = pd.read_pickle("df_joined_clean.pkl")
+df_joined = pd.read_pickle("data/final/df_joined_clean.pkl")
 
 
 #colors
