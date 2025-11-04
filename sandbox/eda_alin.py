@@ -7,20 +7,21 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-df_all = pd.read_csv("huggingface_llm_metadata.csv")
-#df_100 = pd.read_csv("huggingface_100_llm_metadata.csv")
-df_lb = pd.read_csv("hf_scraped.csv")
+#df_all = pd.read_csv("huggingface_llm_metadata.csv")
+df_all = pd.read_csv("./huggingface_100_llm_metadata.csv")
+df_lb = pd.read_csv("./hf_scraped.csv")
 
 
 
 # -------------------------- Check for gaps / missing data ----------------------
 
 # data inspect 
-display(df_all.head())  
-display(df_lb.head())
-
 print(df_all.columns.tolist())
 print(df_lb.columns.tolist())
+
+display(df_all.head(3))  
+display(df_lb.head(3))
+
 
 # ----------- 1a Check for duplicate row
 
@@ -62,10 +63,11 @@ print(set(df_all.columns).intersection(df_lb.columns))
 def clean_model_name(series):
     return (
         series.astype(str)
-        .str.strip()                     
-        .str.lower()                     
-        .str.replace(r"\s+", " ", regex=True)  
-        .str.replace(r"[^a-z0-9_\-/\.]", "", regex=True)  
+        .str.strip()
+        .str.lower()
+        .str.replace(r"\s+", " ", regex=True)
+        .str.replace(r"-instruct(?:-[a-z0-9]+)?$", "-instruct", regex=True)
+        .str.replace("smollm2-135m", "smollm-135m", regex=False)
     )
 
 # --------------1d creating the model variables in both dataset and droping the unnecessary column
@@ -92,7 +94,8 @@ df_all.columns = df_all.columns.str.lower()
 df_lb.columns = df_lb.columns.str.lower()
 
 
-
+print(df_all.columns.tolist())
+print(df_lb.columns.tolist())
 
 # ----------------- 1f inner join (4 Format your dataset)
 
@@ -110,6 +113,10 @@ df_joined = df_joined[
     + [c for c in df_joined.columns if c not in ["model", "model_type", "rank", "type", "gated"]]
 ]
 
+# missing models
+missing_lb = df_lb[~df_lb["model"].isin(df_joined["model"])][["model"]].drop_duplicates()
+print("Models from df_lb that did NOT join:", len(missing_lb))
+display(missing_lb)
 
 
 # ------------- 1g missing data 

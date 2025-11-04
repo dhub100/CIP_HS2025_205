@@ -68,7 +68,7 @@ Dates were converted to `datetime`, percentage and CO₂ values were parsed into
 
 Finally, two new variables were added: `score per billion parameters` (for performance efficiency) and `score per kg CO₂` (for environmental efficiency). The resulting dataset was saved as **df_joined.pkl** for further analysis.
 
-## Q 1 – Which models offer the best size-to-performance ratio?
+## Q 1 - Which models offer the best size-to-performance ratio?
 
 ```{python}
 #| label: import
@@ -140,7 +140,7 @@ tbl_bench
 ```
 :::
 
-## Q2 – Which models are the most cost-effective?
+## Q2 - Which models are the most cost-effective?
 
 We examine the **environmental costs** of models during their lifecycle and inference, using *CO₂ cost* as a proxy for sustainability. Rather than relying solely on benchmark metrics, we use **user likes** as a holistic measure of perceived usefulness, integrating aspects like accuracy, usability, documentation, and community engagement.
 
@@ -220,7 +220,7 @@ plt.show()
 
 As, we can see, most models concentrate within a narrow, low CO₂ cost range, suggesting that frequently downloaded models tend to be computationally efficient - likely because users operate with limited resources and large models may not run on their hardware. A few large-scale outliers with substantially higher emissions indicate that scaling still incurs significant environmental costs. Approximately half the models achieve modest likes per download, while a smaller subset shows much higher user approval. Models in the *green Balanced Best Zone* combine low ecological footprint with high user value, demonstrating that **strong perceived quality and sustainability are not mutually exclusive**. This subset points to promising directions for future model optimization.
 
-## Q 3 – How do open-source models differ from proprietary ones in terms of performance?
+## Q 3 - How do open-source models differ from proprietary ones in terms of performance?
 
 ### Average benchmark score by access type comparison
 
@@ -300,7 +300,7 @@ Figure 3: Average benchmark score by access type.
 :::
 
 ::: {.callout-note collapse="true" title="Community Convention"}
-Following the [Hugging Face Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) convention, we define *practical accuracy* as achieving an average benchmark score above *25%*—the approximate level at which models demonstrate consistent reasoning and instruction-following capabilities. This threshold serves as an informative benchmark, not a strict pass/fail cutoff.
+Following the [Hugging Face Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) convention, we define *practical accuracy* as achieving an average benchmark score above *25%*-the approximate level at which models demonstrate consistent reasoning and instruction-following capabilities. This threshold serves as an informative benchmark, not a strict pass/fail cutoff.
 :::
 
 To assess whether these performance differences are statistically significant, we conducted a *Welch's t-test* on average benchmark scores. This test does not assume equal variances or sample sizes—appropriate given that proprietary models are fewer but sometimes larger. The result (t = -1.76, p = 0.09) indicates no statistically significant difference between groups.
@@ -378,7 +378,7 @@ plt.show()
 
 ## Conclusion
 
-This project demonstrated a complete data science workflow—from data collection through API interaction and web scraping, to data cleaning, merging heterogeneous datasets, and statistical modeling. We developed skills in handling dynamic web content with `Selenium`, processing complex `JSON` structures, and applying appropriate `statistical methods` (correlation, t-tests, ANCOVA) to answer domain-specific research questions. The analysis reinforced the importance of normalizing metrics for fair comparison and controlling for confounding variables when drawing conclusions. In addition, we explored multiple `plotting libraries` to enhance our data visualization skills and deepen our understanding of effective visual communication.
+This project demonstrated a complete data science workflow-from data collection through API interaction and web scraping, to data cleaning, merging heterogeneous datasets, and statistical modeling. We developed skills in handling dynamic web content with `Selenium`, processing complex `JSON` structures, and applying appropriate `statistical methods` (correlation, t-tests, ANCOVA) to answer domain-specific research questions. The analysis reinforced the importance of normalizing metrics for fair comparison and controlling for confounding variables when drawing conclusions. In addition, we explored multiple `plotting libraries` to enhance our data visualization skills and deepen our understanding of effective visual communication.
 
 A significant limitation is sample size. The [HuggingFace Open Leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard) displays 4,756 models as of November 2024, but we scraped only models retrieved from the API due to our method's inability to handle the scrollable table feature. This constraint affects our analysis in multiple ways: trends remain unclear (e.g., we cannot draw conclusions about models exceeding 20 billion parameters in Figure 1), statistical power is limited, and interpretations carry greater uncertainty. A more comprehensive scraping approach would enable collection of significantly more benchmark observations.
 
