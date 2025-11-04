@@ -19,8 +19,6 @@ _site/
 .DS_Store
 
 # --- Large or temporary data ---
-*.pkl
-*.csv
 *.xlsx
 *.json
 *.log
