@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.32">
+<meta name="generator" content="quarto-1.8.25">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -58,20 +58,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="report_files/libs/clipboard/clipboard.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script><script src="report_files/libs/clipboard/clipboard.min.js"></script>
 <script src="report_files/libs/quarto-html/quarto.js" type="module"></script>
 <script src="report_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="report_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="report_files/libs/quarto-html/popper.min.js"></script>
 <script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="report_files/libs/quarto-html/anchor.min.js"></script>
 <link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="report_files/libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="report_files/libs/bootstrap/bootstrap-81267100e462c21b3d6c0d5bf76a3417.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+<link href="report_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="https://cdn.jsdelivr.net/npm/requirejs@2.3.6/require.min.js" integrity="sha384-c9c+LnTbwQ3aujuU7ULEPVvgLs+Fn6fJUvIGTsuu1ZcCf11fiEubah0ttpca4ntM sha384-6V1/AdqZRWk1KAlWbKBlGhN7VG4iE/yAZcO6NZPMF8od0vukrvr0tg4qY6NSrItx" crossorigin="anonymous"></script>
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+<script type="text/javascript">
+window.PlotlyConfig = {MathJaxConfig: 'local'};
+if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
+</script>
+<script type="module">import "https://cdn.plot.ly/plotly-3.1.1.min"</script>
+
 
 
 </head>
@@ -121,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="imports" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -135,7 +142,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.express <span class="im">as</span> px</span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> plotly.graph_objects <span class="im">as</span> go</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> ttest_ind</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.formula.api <span class="im">as</span> smf</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <section id="overview" class="level2">
@@ -168,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="import" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_joined <span class="op">=</span> pd.read_pickle(Path(<span class="st">"../data"</span>, <span class="st">"final"</span>, <span class="st">"df_joined_clean.pkl"</span>))</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df_joined <span class="op">=</span> pd.read_pickle(Path(<span class="st">"../data"</span>, <span class="st">"final"</span>, <span class="st">"df_joined_clean.pkl"</span>))</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#colors</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>sns.set_theme(style<span class="op">=</span><span class="st">"ticks"</span>, palette<span class="op">=</span><span class="st">"pastel"</span>, font_scale<span class="op">=</span><span class="fl">1.1</span>)</span>
@@ -176,14 +183,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"main"</span>: <span class="st">"#A1C9F4"</span>,   <span class="co"># blue</span></span>
 <span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"accent"</span>: <span class="st">"#FFB482"</span>, <span class="co"># pastel orange</span></span>
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"cat3"</span>: <span class="st">"#8DE5A1"</span>    <span class="co"># green</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <p>To explore which models offer the best size-to-performance ratio, we examined the relationship between model parameters (in billions) and average benchmark scores using a LOESS smoother. We keep the x-axis linear to maximize readability: absolute size differences and where performance plateaus are immediately visible.</p>
 <div id="cell-avg_benchmark_vs_size_loess" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p<span class="op">=</span>(</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>p<span class="op">=</span>(</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    ggplot(df_joined, aes(x<span class="op">=</span><span class="st">"model_size"</span>, y<span class="op">=</span><span class="st">"average"</span>))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_point(alpha<span class="op">=</span><span class="fl">0.30</span>, color<span class="op">=</span>COLORS[<span class="st">"main"</span>])</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> geom_smooth(method<span class="op">=</span><span class="st">"loess"</span>, span<span class="op">=</span><span class="fl">0.9</span>, color<span class="op">=</span>COLORS[<span class="st">"accent"</span>], se<span class="op">=</span><span class="va">False</span>)</span>
@@ -194,9 +201,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    )</span>
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">+</span> theme_bw()</span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>p</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <div id="avg_benchmark_vs_size_loess" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="report_files/figure-html/avg_benchmark_vs_size_loess-output-1.png" width="672" height="480" class="figure-img"></p>
@@ -209,19 +216,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="corr_model_size_perf" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df_joined[[<span class="st">"model_size"</span>, <span class="st">"average"</span>]].corr(method<span class="op">=</span><span class="st">"pearson"</span>).iloc[<span class="dv">0</span>,<span class="dv">1</span>]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The resulting coefficient (r ≈ </span><span class="sc">{</span>corr<span class="sc">:.2f}</span><span class="ss">) confirms that larger models achieve higher benchmark scores."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> df_joined[[<span class="st">"model_size"</span>, <span class="st">"average"</span>]].corr(method<span class="op">=</span><span class="st">"pearson"</span>).iloc[<span class="dv">0</span>,<span class="dv">1</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"The resulting coefficient (r ≈ </span><span class="sc">{</span>corr<span class="sc">:.2f}</span><span class="ss">) confirms that larger models achieve higher benchmark scores."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<p>The resulting coefficient (r ≈ 0.75) confirms that larger models achieve higher benchmark scores.</p>
+<p>The resulting coefficient (r ≈ 0.63) confirms that larger models achieve higher benchmark scores.</p>
 </div>
 <p>While larger models dominate benchmark rankings, notable exceptions exist: <em>Qwen 2.5-32B-Instruct</em> achieves the highest average score (≈46.6%) despite being half the size of <em>Meta-Llama 3 70B</em> models. This demonstrates that model architecture, training efficiency, and fine-tuning strategies can outweigh sheer scale. Other compact models such as <em>Phi-4</em> and <em>Llama 3-8B-Instruct</em> achieve strong scores for their size, highlighting that smaller, well-optimized models can offer efficient size-to-performance trade-offs.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Top models by sizw with benchmark performance metrics">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Top models by sizw with benchmark performance metrics
+<span class="screen-reader-only">Note</span>Top models by sizw with benchmark performance metrics
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -230,7 +237,7 @@ Top models by sizw with benchmark performance metrics
 <div class="cell tbl-cap-location-top" data-tbl-cap="Top models by size with benchmark performance metrics" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5" data-cap-location="top"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>benchmark_cols <span class="op">=</span> [</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" data-cap-location="top"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>benchmark_cols <span class="op">=</span> [</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"model"</span>, <span class="st">"model_size"</span>, <span class="st">"average"</span>, <span class="st">"score_per_billion"</span>]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>available_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> benchmark_cols <span class="cf">if</span> c <span class="kw">in</span> df_joined.columns]</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
@@ -244,13 +251,13 @@ Top models by sizw with benchmark performance metrics
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>num_cols <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> tbl_bench.columns <span class="cf">if</span> c <span class="kw">not</span> <span class="kw">in</span> [<span class="st">"model"</span>]]</span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>tbl_bench[num_cols] <span class="op">=</span> tbl_bench[num_cols].<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>tbl_bench</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>tbl_bench</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div id="table_model_size_vs_benchmarks" class="cell-output cell-output-display" data-execution_count="5">
 <div>
 
 
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
 <caption>Top models by size with benchmark performance metrics</caption>
 <thead>
 <tr class="header">
@@ -263,74 +270,74 @@ Top models by sizw with benchmark performance metrics
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">25</td>
+<th data-quarto-table-cell-role="th">23</th>
 <td>qwen/qwen2.5-32b-instruct</td>
 <td>32.0</td>
 <td>46.60</td>
 <td>1.46</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">21</td>
+<th data-quarto-table-cell-role="th">39</th>
+<td>qwen/qwen2.5-32b-instruct</td>
+<td>32.0</td>
+<td>46.60</td>
+<td>1.46</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">24</th>
 <td>meta-llama/llama-3.3-70b-instruct</td>
 <td>70.0</td>
 <td>44.85</td>
 <td>0.64</td>
 </tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">17</td>
+<tr class="even">
+<th data-quarto-table-cell-role="th">26</th>
 <td>meta-llama/llama-3.1-70b-instruct</td>
 <td>70.0</td>
 <td>43.41</td>
 <td>0.62</td>
 </tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">28</th>
+<td>qwen/qwen2.5-14b-instruct</td>
+<td>14.0</td>
+<td>41.56</td>
+<td>2.97</td>
+</tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">19</td>
+<th data-quarto-table-cell-role="th">27</th>
+<td>qwen/qwen2.5-14b-instruct</td>
+<td>14.0</td>
+<td>41.56</td>
+<td>2.97</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">43</th>
 <td>meta-llama/meta-llama-3-70b-instruct</td>
 <td>70.0</td>
 <td>36.37</td>
 <td>0.52</td>
 </tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">36</th>
+<td>qwen/qwen2.5-7b-instruct</td>
+<td>7.0</td>
+<td>35.20</td>
+<td>5.03</td>
+</tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">1</td>
+<th data-quarto-table-cell-role="th">1</th>
 <td>qwen/qwen2.5-7b-instruct</td>
 <td>7.0</td>
 <td>35.20</td>
 <td>5.03</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">15</td>
-<td>microsoft/phi-4</td>
-<td>14.0</td>
-<td>30.36</td>
-<td>2.17</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">12</td>
-<td>microsoft/phi-3-mini-4k-instruct</td>
-<td>3.8</td>
-<td>27.56</td>
-<td>7.25</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>qwen/qwen2.5-3b-instruct</td>
-<td>3.0</td>
-<td>27.16</td>
-<td>9.05</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">9</td>
-<td>meta-llama/llama-3.2-3b-instruct</td>
-<td>3.0</td>
-<td>24.20</td>
-<td>8.07</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">13</td>
-<td>meta-llama/meta-llama-3-8b-instruct</td>
-<td>8.0</td>
-<td>23.91</td>
-<td>2.99</td>
+<th data-quarto-table-cell-role="th">2</th>
+<td>qwen/qwen2.5-7b-instruct</td>
+<td>7.0</td>
+<td>35.20</td>
+<td>5.03</td>
 </tr>
 </tbody>
 </table>
@@ -347,7 +354,7 @@ Top models by sizw with benchmark performance metrics
 <div id="dataprep" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_joined[<span class="st">"likes_per_download"</span>] <span class="op">=</span> df_joined[<span class="st">"likes"</span>] <span class="op">/</span> df_joined[<span class="st">"downloads"</span>].replace(<span class="dv">0</span>, pd.NA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>df_joined[<span class="st">"likes_per_download"</span>] <span class="op">=</span> df_joined[<span class="st">"likes"</span>] <span class="op">/</span> df_joined[<span class="st">"downloads"</span>].replace(<span class="dv">0</span>, pd.NA)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="columns">
@@ -355,7 +362,7 @@ Top models by sizw with benchmark performance metrics
 <div id="cell-density_plot_likes_per_download_vs_co2_cost" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>blue <span class="op">=</span> <span class="st">"#A1C9F4"</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>blue <span class="op">=</span> <span class="st">"#A1C9F4"</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>white_to_blue <span class="op">=</span> LinearSegmentedColormap.from_list(</span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"white_to_blue"</span>,</span>
@@ -410,12 +417,12 @@ Top models by sizw with benchmark performance metrics
 <span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">"Density distribution 'Likes / Download' vs. 'CO2 costs'"</span>)</span>
 <span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">"upper right"</span>)</span>
 <span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="report_files/figure-html/density_plot_likes_per_download_vs_co2_cost-output-1.png" id="density_plot_likes_per_download_vs_co2_cost" class="img-fluid figure-img"></p>
+<p><img src="report_files/figure-html/density_plot_likes_per_download_vs_co2_cost-output-1.png" id="density_plot_likes_per_download_vs_co2_cost" width="748" height="458" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -436,10 +443,10 @@ Top models by sizw with benchmark performance metrics
 <p>To examine whether model accessibility influences performance, we compared average benchmark scores of open-source and proprietary LLMs. A practical performance threshold was introduced as a visual reference. Each dot represents a model, color-coded by access type. The dashed gray line marks the 25% threshold.</p>
 <p>While proprietary models more frequently exceed this level, several open-source models approach or surpass it, suggesting that performance parity is increasingly attainable.</p>
 </div><div class="column" style="width:60%;">
-<div id="avg_score_threshold_plotly" class="cell" data-execution_count="8">
+<div id="cell-avg_score_threshold_plotly" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_joined_plot <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>, <span class="st">"access type"</span>, <span class="st">"model_size"</span>]).copy()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_joined_plot <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>, <span class="st">"access type"</span>, <span class="st">"model_size"</span>]).copy()</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>color_map <span class="op">=</span> {</span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"open-source"</span>: <span class="st">"#A1C9F4"</span>,</span>
@@ -488,21 +495,13 @@ Top models by sizw with benchmark performance metrics
 <span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>    hoverlabel<span class="op">=</span><span class="bu">dict</span>(bgcolor<span class="op">=</span><span class="st">"white"</span>, font_size<span class="op">=</span><span class="dv">12</span>)</span>
 <span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>fig.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<div id="avg_score_threshold_plotly-1" class="cell-output cell-output-display">
-        <script type="text/javascript">
-        window.PlotlyConfig = {MathJaxConfig: 'local'};
-        if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}
-        </script>
-        <script type="module">import "https://cdn.plot.ly/plotly-3.1.1.min"</script>
-        
-</div>
-<div id="avg_score_threshold_plotly-2" class="cell-output cell-output-display">
+<div id="avg_score_threshold_plotly" class="cell-output cell-output-display">
 <div>            <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_SVG"></script><script type="text/javascript">if (window.MathJax && window.MathJax.Hub && window.MathJax.Hub.Config) {window.MathJax.Hub.Config({SVG: {font: "STIX-Web"}});}</script>                <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
-        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.1.1.min.js" integrity="sha256-HUEFyfiTnZJxCxur99FjbKYTvKSzwDaD3/x5TqHpFu4=" crossorigin="anonymous"></script>                <div id="fd1cf90e-dc28-4ce2-ae9b-d8aa10fc8407" class="plotly-graph-div" style="height:400px; width:600px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("fd1cf90e-dc28-4ce2-ae9b-d8aa10fc8407")) {                    Plotly.newPlot(                        "fd1cf90e-dc28-4ce2-ae9b-d8aa10fc8407",                        [{"alignmentgroup":"True","boxpoints":"all","customdata":{"dtype":"f8","bdata":"WDm0yHa+vz8AAAAAAAAcQAAAAAAAAPg\u002fAAAAAAAACECamZmZmZnxP9zXgXNGlLY\u002fAAAAAAAAQEAAAAAAAAAcQAAAAAAAAOA\u002fZmZmZmZmDkAAAAAAAAAsQJqZmZmZmek\u002fAAAAAAAAIEAAAAAAAAD4PwAAAAAAAAhAAAAAAAAAQEAAAAAAAAAcQAAAAAAAAOA\u002fMzMzMzMz+z8AAAAAAAAcQAAAAAAAAPg\u002fAAAAAAAAHEA=","shape":"22, 1"},"fillcolor":"rgba(255,255,255,0)","hoveron":"points","hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eaverage=%{y}\u003cbr\u003emodel_size=%{customdata[0]}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["openai-community\u002fgpt2","qwen\u002fqwen2.5-7b-instruct","qwen\u002fqwen2.5-1.5b-instruct","qwen\u002fqwen2.5-3b-instruct","tinyllama\u002ftinyllama-1.1b-chat-v1.0","distilbert\u002fdistilgpt2","deepseek-ai\u002fdeepseek-r1-distill-qwen-32b","mistralai\u002fmistral-7b-instruct-v0.2","qwen\u002fqwen2.5-0.5b-instruct","microsoft\u002fphi-3-mini-4k-instruct","microsoft\u002fphi-4","openai-community\u002fgpt2-large","deepseek-ai\u002fdeepseek-r1-distill-llama-8b","deepseek-ai\u002fdeepseek-r1-distill-qwen-1.5b","microsoft\u002fphi-2","qwen\u002fqwen2.5-32b-instruct","deepseek-ai\u002fdeepseek-r1-distill-qwen-7b","qwen\u002fqwen2-0.5b","huggingfacetb\u002fsmollm-135m","dicta-il\u002fdictalm2.0-instruct","qwen\u002fqwen2-1.5b-instruct","mistralai\u002fmistral-7b-v0.1"],"legendgroup":"open-source","line":{"color":"rgba(255,255,255,0)"},"marker":{"color":"#A1C9F4","line":{"width":0},"size":9},"name":"open-source","offsetgroup":"open-source","orientation":"v","pointpos":0,"showlegend":true,"x":["open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"CtejcD0KGkCamZmZmZlBQK5H4XoUbjJAKVyPwvUoO0CPwvUoXI8GQAAAAAAAABBA9ihcj8L1NkDD9Shcj4IyQLgehetROCRAj8L1KFyPO0Bcj8L1KFw+QEjhehSuRxZAH4XrUbgeKkAzMzMzM7MkQI\u002fC9ShcDy9AzczMzMxMR0B7FK5H4fotQOF6FK5H4RxAzczMzMzMG0BI4XoUrscwQEjhehSuRyxAKVyPwvUoLUA="},"y0":" ","yaxis":"y","type":"box","jitter":0.3,"opacity":0.85},{"alignmentgroup":"True","boxpoints":"all","customdata":{"dtype":"f8","bdata":"AAAAAAAAIEAAAAAAAADwPwAAAAAAAAhAAAAAAAAAIEAAAAAAAAAcQAAAAAAAgFFAAAAAAACAUUAAAAAAAAAcQAAAAAAAgFFAAAAAAAAAAEA=","shape":"10, 1"},"fillcolor":"rgba(255,255,255,0)","hoveron":"points","hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eaverage=%{y}\u003cbr\u003emodel_size=%{customdata[0]}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["meta-llama\u002fllama-3.1-8b-instruct","meta-llama\u002fllama-3.2-1b-instruct","meta-llama\u002fllama-3.2-3b-instruct","meta-llama\u002fmeta-llama-3-8b-instruct","meta-llama\u002fllama-2-7b-hf","meta-llama\u002fllama-3.1-70b-instruct","meta-llama\u002fmeta-llama-3-70b-instruct","meta-llama\u002fllama-2-7b-chat-hf","meta-llama\u002fllama-3.3-70b-instruct","google\u002fgemma-2-2b-it"],"legendgroup":"proprietary","line":{"color":"rgba(255,255,255,0)"},"marker":{"color":"#8DE5A1","line":{"width":0},"size":9},"name":"proprietary","offsetgroup":"proprietary","orientation":"v","pointpos":0,"showlegend":true,"x":["proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"w\u002fUoXI\u002fCN0DhehSuR+EsQDMzMzMzMzhAKVyPwvXoN0AfhetRuJ4hQBSuR+F6tEVAj8L1KFwvQkC4HoXrUTgjQM3MzMzMbEZAzczMzMwMMUA="},"y0":" ","yaxis":"y","type":"box","jitter":0.3,"opacity":0.85}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Access Type"},"categoryorder":"array","categoryarray":["open-source","proprietary"]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Average Score (%)"}},"legend":{"title":{"text":"Access Type"},"tracegroupgap":0},"title":{"text":"Average Benchmark Score by Access Type (interactive)","x":0.05},"boxmode":"overlay","shapes":[{"line":{"color":"gray","dash":"dash","width":2},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":25,"y1":25,"yref":"y"}],"annotations":[{"showarrow":false,"text":"25% Practical Threshold","x":0,"xanchor":"left","xref":"x domain","y":25,"yanchor":"bottom","yref":"y"}],"font":{"size":13},"hoverlabel":{"font":{"size":12},"bgcolor":"white"},"height":400,"width":600},                        {"responsive": true}                    ).then(function(){
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.1.1.min.js" integrity="sha256-HUEFyfiTnZJxCxur99FjbKYTvKSzwDaD3/x5TqHpFu4=" crossorigin="anonymous"></script>                <div id="278d90c0-7fa2-4bdb-8331-647a18d940f0" class="plotly-graph-div" style="height:400px; width:600px;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("278d90c0-7fa2-4bdb-8331-647a18d940f0")) {                    Plotly.newPlot(                        "278d90c0-7fa2-4bdb-8331-647a18d940f0",                        [{"alignmentgroup":"True","boxpoints":"all","customdata":{"dtype":"f8","bdata":"WDm0yHa+vz8AAAAAAAAcQAAAAAAAABxAAAAAAAAA+D8AAAAAAAD4P5qZmZmZmfE\u002fAAAAAAAACEAAAAAAAAAcQNzXgXNGlLY\u002fAAAAAAAAQEAAAAAAAADgPwAAAAAAAOA\u002fZmZmZmZmDkCamZmZmZnpPwAAAAAAAPg\u002fAAAAAAAAQEAAAAAAAAAIQAAAAAAAACxAAAAAAAAALEAAAAAAAADgPwAAAAAAABxAAAAAAAAAIEAzMzMzMzP7PwAAAAAAABxAAAAAAAAAHEAAAAAAAAAcQAAAAAAAACxAAAAAAAAAQEAAAAAAAAAcQJqZmZmZmdk\u002fMzMzMzMz+z8AAAAAAAAcQGZmZmZmZg5A","shape":"33, 1"},"fillcolor":"rgba(255,255,255,0)","hoveron":"points","hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eaverage=%{y}\u003cbr\u003emodel_size=%{customdata[0]}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["openai-community\u002fgpt2","qwen\u002fqwen2.5-7b-instruct","qwen\u002fqwen2.5-7b-instruct","qwen\u002fqwen2.5-1.5b-instruct","qwen\u002fqwen2.5-1.5b-instruct","tinyllama\u002ftinyllama-1.1b-chat-v1.0","qwen\u002fqwen2.5-3b-instruct","mistralai\u002fmistral-7b-instruct-v0.2","distilbert\u002fdistilgpt2","deepseek-ai\u002fdeepseek-r1-distill-qwen-32b","qwen\u002fqwen2.5-0.5b-instruct","qwen\u002fqwen2.5-0.5b-instruct","microsoft\u002fphi-3-mini-4k-instruct","openai-community\u002fgpt2-large","deepseek-ai\u002fdeepseek-r1-distill-qwen-1.5b","qwen\u002fqwen2.5-32b-instruct","microsoft\u002fphi-2","qwen\u002fqwen2.5-14b-instruct","qwen\u002fqwen2.5-14b-instruct","qwen\u002fqwen2-0.5b","deepseek-ai\u002fdeepseek-r1-distill-qwen-7b","deepseek-ai\u002fdeepseek-r1-distill-llama-8b","huggingfacetb\u002fsmollm-135m","qwen\u002fqwen2.5-7b-instruct","qwen\u002fqwen2.5-7b-instruct","mistralai\u002fmistral-7b-v0.1","microsoft\u002fphi-4","qwen\u002fqwen2.5-32b-instruct","mistralai\u002fmistral-7b-instruct-v0.1","openai-community\u002fgpt2-medium","huggingfacetb\u002fsmollm-135m","qwen\u002fqwen2-7b-instruct","microsoft\u002fphi-3.5-mini-instruct"],"legendgroup":"open-source","line":{"color":"rgba(255,255,255,0)"},"marker":{"color":"#A1C9F4","line":{"width":0},"size":9},"name":"open-source","offsetgroup":"open-source","orientation":"v","pointpos":0,"showlegend":true,"x":["open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source","open-source"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"CtejcD0KGkCamZmZmZlBQJqZmZmZmUFArkfhehRuMkCuR+F6FG4yQI\u002fC9ShcjwZAKVyPwvUoO0DD9Shcj4IyQAAAAAAAABBA9ihcj8L1NkC4HoXrUTgkQLgehetROCRAj8L1KFyPO0BI4XoUrkcWQDMzMzMzsyRAzczMzMxMR0CPwvUoXA8vQEjhehSux0RASOF6FK7HREDhehSuR+EcQHsUrkfh+i1AH4XrUbgeKkDNzMzMzMwbQJqZmZmZmUFAmpmZmZmZQUApXI\u002fC9SgtQFyPwvUoXD5AzczMzMxMR0AK16NwPYopQJqZmZmZmRdAzczMzMzMG0BxPQrXo\u002fA7QK5H4XoULjxA"},"y0":" ","yaxis":"y","type":"box","jitter":0.3,"opacity":0.85},{"alignmentgroup":"True","boxpoints":"all","customdata":{"dtype":"f8","bdata":"AAAAAAAAIEAAAAAAAAAgQAAAAAAAAPA\u002fAAAAAAAA8D8AAAAAAAAIQAAAAAAAAAhAAAAAAAAAIEAAAAAAAAAgQAAAAAAAgFFAAAAAAACAUUAAAAAAAAAcQAAAAAAAgFFAAAAAAAAAHEA=","shape":"13, 1"},"fillcolor":"rgba(255,255,255,0)","hoveron":"points","hovertemplate":"\u003cb\u003e%{hovertext}\u003c\u002fb\u003e\u003cbr\u003e\u003cbr\u003eaverage=%{y}\u003cbr\u003emodel_size=%{customdata[0]}\u003cextra\u003e\u003c\u002fextra\u003e","hovertext":["meta-llama\u002fllama-3.1-8b-instruct","meta-llama\u002fllama-3.1-8b-instruct","meta-llama\u002fllama-3.2-1b-instruct","meta-llama\u002fllama-3.2-1b-instruct","meta-llama\u002fllama-3.2-3b-instruct","meta-llama\u002fllama-3.2-3b-instruct","meta-llama\u002fmeta-llama-3-8b-instruct","meta-llama\u002fmeta-llama-3-8b-instruct","meta-llama\u002fllama-3.3-70b-instruct","meta-llama\u002fllama-3.1-70b-instruct","meta-llama\u002fllama-2-7b-hf","meta-llama\u002fmeta-llama-3-70b-instruct","meta-llama\u002fllama-2-7b-chat-hf"],"legendgroup":"proprietary","line":{"color":"rgba(255,255,255,0)"},"marker":{"color":"#8DE5A1","line":{"width":0},"size":9},"name":"proprietary","offsetgroup":"proprietary","orientation":"v","pointpos":0,"showlegend":true,"x":["proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary","proprietary"],"x0":" ","xaxis":"x","y":{"dtype":"f8","bdata":"w\u002fUoXI\u002fCN0DD9Shcj8I3QOF6FK5H4SxA4XoUrkfhLEAzMzMzMzM4QDMzMzMzMzhAKVyPwvXoN0ApXI\u002fC9eg3QM3MzMzMbEZAFK5H4Xq0RUAfhetRuJ4hQI\u002fC9ShcL0JAuB6F61E4I0A="},"y0":" ","yaxis":"y","type":"box","jitter":0.3,"opacity":0.85}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"rgb(36,36,36)"},"error_y":{"color":"rgb(36,36,36)"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"baxis":{"endlinecolor":"rgb(36,36,36)","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"rgb(36,36,36)"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"histogram2d"}],"histogram":[{"marker":{"line":{"color":"white","width":0.6}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"},"colorscale":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"rgb(237,237,237)"},"line":{"color":"white"}},"header":{"fill":{"color":"rgb(217,217,217)"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":1,"tickcolor":"rgb(36,36,36)","ticks":"outside"}},"colorscale":{"diverging":[[0.0,"rgb(103,0,31)"],[0.1,"rgb(178,24,43)"],[0.2,"rgb(214,96,77)"],[0.3,"rgb(244,165,130)"],[0.4,"rgb(253,219,199)"],[0.5,"rgb(247,247,247)"],[0.6,"rgb(209,229,240)"],[0.7,"rgb(146,197,222)"],[0.8,"rgb(67,147,195)"],[0.9,"rgb(33,102,172)"],[1.0,"rgb(5,48,97)"]],"sequential":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]],"sequentialminus":[[0.0,"#440154"],[0.1111111111111111,"#482878"],[0.2222222222222222,"#3e4989"],[0.3333333333333333,"#31688e"],[0.4444444444444444,"#26828e"],[0.5555555555555556,"#1f9e89"],[0.6666666666666666,"#35b779"],[0.7777777777777778,"#6ece58"],[0.8888888888888888,"#b5de2b"],[1.0,"#fde725"]]},"colorway":["#1F77B4","#FF7F0E","#2CA02C","#D62728","#9467BD","#8C564B","#E377C2","#7F7F7F","#BCBD22","#17BECF"],"font":{"color":"rgb(36,36,36)"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"white"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"margin":{"b":0,"l":0,"r":0,"t":30},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","radialaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"zaxis":{"backgroundcolor":"white","gridcolor":"rgb(232,232,232)","gridwidth":2,"linecolor":"rgb(36,36,36)","showbackground":true,"showgrid":false,"showline":true,"ticks":"outside","zeroline":false,"zerolinecolor":"rgb(36,36,36)"}},"shapedefaults":{"fillcolor":"black","line":{"width":0},"opacity":0.3},"ternary":{"aaxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"baxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"},"bgcolor":"white","caxis":{"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside"}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"},"yaxis":{"automargin":true,"gridcolor":"rgb(232,232,232)","linecolor":"rgb(36,36,36)","showgrid":false,"showline":true,"ticks":"outside","title":{"standoff":15},"zeroline":false,"zerolinecolor":"rgb(36,36,36)"}}},"xaxis":{"anchor":"y","domain":[0.0,1.0],"title":{"text":"Access Type"},"categoryorder":"array","categoryarray":["open-source","proprietary"]},"yaxis":{"anchor":"x","domain":[0.0,1.0],"title":{"text":"Average Score (%)"}},"legend":{"title":{"text":"Access Type"},"tracegroupgap":0},"title":{"text":"Average Benchmark Score by Access Type (interactive)","x":0.05},"boxmode":"overlay","shapes":[{"line":{"color":"gray","dash":"dash","width":2},"type":"line","x0":0,"x1":1,"xref":"x domain","y0":25,"y1":25,"yref":"y"}],"annotations":[{"showarrow":false,"text":"25% Practical Threshold","x":0,"xanchor":"left","xref":"x domain","y":25,"yanchor":"bottom","yref":"y"}],"font":{"size":13},"hoverlabel":{"font":{"size":12},"bgcolor":"white"},"height":400,"width":600},                        {"responsive": true}                    ).then(function(){
                             
-var gd = document.getElementById('fd1cf90e-dc28-4ce2-ae9b-d8aa10fc8407');
+var gd = document.getElementById('278d90c0-7fa2-4bdb-8331-647a18d940f0');
 var x = new MutationObserver(function (mutations, observer) {{
         var display = window.getComputedStyle(gd).display;
         if (!display || display === 'none') {{
@@ -530,12 +529,12 @@ if (outputEl) {{
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Community Convention">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Community Convention
+<span class="screen-reader-only">Note</span>Community Convention
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -548,12 +547,12 @@ Community Convention
 <p>To assess whether these performance differences are statistically significant, we conducted a <em>Welch’s t-test</em> on average benchmark scores. This test does not assume equal variances or sample sizes—appropriate given that proprietary models are fewer but sometimes larger. The result (t = -1.76, p = 0.09) indicates no statistically significant difference between groups.</p>
 <p>To control for model size differences, we performed an <em>ANCOVA</em> with <code>average</code> score as the dependent variable, <code>log10(model_size)</code> as a covariate, and <code>access type</code> as a categorical predictor. The ANCOVA results show that model size significantly predicts performance: every ten-fold increase in parameters yields approximately a 13-point rise in average benchmark score. Crucially, access type (open-source vs.&nbsp;proprietary) shows no measurable effect when controlling for size. Model scale, not licensing status, is the primary driver of performance differences.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Welch t-test summary">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Welch t-test summary
+<span class="screen-reader-only">Note</span>Welch t-test summary
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -562,29 +561,29 @@ Welch t-test summary
 <div id="welch_ttest_avg" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>,<span class="st">"access type"</span>]).copy()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>,<span class="st">"access type"</span>]).copy()</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>open_avg <span class="op">=</span> d.loc[d[<span class="st">"access type"</span>]<span class="op">==</span><span class="st">"open-source"</span>,<span class="st">"average"</span>].astype(<span class="bu">float</span>)</span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>prop_avg <span class="op">=</span> d.loc[d[<span class="st">"access type"</span>]<span class="op">==</span><span class="st">"proprietary"</span>,<span class="st">"average"</span>].astype(<span class="bu">float</span>)</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>t, p <span class="op">=</span> ttest_ind(open_avg, prop_avg, equal_var<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Welch's t-test result: t = </span><span class="sc">{</span>t<span class="sc">:.2f}</span><span class="ss">, p = </span><span class="sc">{</span>p<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Welch's t-test result: t = </span><span class="sc">{</span>t<span class="sc">:.2f}</span><span class="ss">, p = </span><span class="sc">{</span>p<span class="sc">:.2f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Welch's t-test result: t = -1.76, p = 0.10</code></pre>
+<pre><code>Welch's t-test result: t = -1.02, p = 0.32</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="ANCOVA summary">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-ANCOVA summary
+<span class="screen-reader-only">Note</span>ANCOVA summary
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
@@ -593,13 +592,13 @@ ANCOVA summary
 <div id="ancova_avg" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dd <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>,<span class="st">"model_size"</span>,<span class="st">"access type"</span>]).copy()</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>dd <span class="op">=</span> df_joined.dropna(subset<span class="op">=</span>[<span class="st">"average"</span>,<span class="st">"model_size"</span>,<span class="st">"access type"</span>]).copy()</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dd[<span class="st">"log_size"</span>] <span class="op">=</span> np.log10(dd[<span class="st">"model_size"</span>].astype(<span class="bu">float</span>))</span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>m <span class="op">=</span> smf.ols(<span class="st">"average ~ log_size + C(Q('access type'))"</span>, data<span class="op">=</span>dd).fit()</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m.summary().tables[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(m.summary().tables[<span class="dv">1</span>])</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
-<p>====================================================================================================== coef std err t P&gt;|t| [0.025 0.975] —————————————————————————————————— Intercept 11.4453 1.874 6.108 0.000 7.613 15.278 C(Q(‘access type’))[T.proprietary] 0.3196 3.215 0.099 0.921 -6.256 6.895 log_size 13.1257 2.115 6.205 0.000 8.799 17.452 ======================================================================================================</p>
+<p>====================================================================================================== coef std err t P&gt;|t| [0.025 0.975] —————————————————————————————————— Intercept 13.0713 1.703 7.674 0.000 9.636 16.507 C(Q(‘access type’))[T.proprietary] -2.8974 2.788 -1.039 0.305 -8.520 2.726 log_size 15.5535 1.906 8.158 0.000 11.709 19.398 ======================================================================================================</p>
 </div>
 </div>
 </div>
@@ -612,7 +611,7 @@ ANCOVA summary
 <div id="cell-per_task_boxplots" class="cell" data-fig-height="3.5" data-fig-width="8" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> [<span class="st">"ifeval"</span>,<span class="st">"mmlu-pro"</span>,<span class="st">"math"</span>,<span class="st">"gpqa"</span>,<span class="st">"bbh"</span>,<span class="st">"musr"</span>] <span class="cf">if</span> c <span class="kw">in</span> df_joined.columns]</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> [c <span class="cf">for</span> c <span class="kw">in</span> [<span class="st">"ifeval"</span>,<span class="st">"mmlu-pro"</span>,<span class="st">"math"</span>,<span class="st">"gpqa"</span>,<span class="st">"bbh"</span>,<span class="st">"musr"</span>] <span class="cf">if</span> c <span class="kw">in</span> df_joined.columns]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="bu">len</span>(tasks)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, n, figsize<span class="op">=</span>(<span class="fl">3.5</span><span class="op">*</span>n, <span class="fl">3.5</span>), constrained_layout<span class="op">=</span><span class="va">True</span>)  </span>
@@ -637,12 +636,12 @@ ANCOVA summary
 <span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(i<span class="op">+</span><span class="dv">1</span>, <span class="bu">len</span>(axes)):</span>
 <span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>    axes[j].axis(<span class="st">"off"</span>)</span>
 <span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output cell-output-display">
 <div id="per_task_boxplots" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
-<p><img src="report_files/figure-html/per_task_boxplots-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="report_files/figure-html/per_task_boxplots-output-1.png" width="2027" height="347" class="figure-img"></p>
 <figcaption>Figure 3: Task-level performance distributions by access type</figcaption>
 </figure>
 </div>
@@ -710,13 +709,14 @@ ANCOVA summary
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy

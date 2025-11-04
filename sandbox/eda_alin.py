@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 import re
 
 #df_all = pd.read_csv("huggingface_llm_metadata.csv")
-df_all = pd.read_csv("./huggingface_100_llm_metadata.csv")
-df_lb = pd.read_csv("./hf_scraped.csv")
+df_all = pd.read_csv("./data/raw/huggingface_100_llm_metadata.csv")
+df_lb = pd.read_csv("./data/hf500_scraped.csv")
 
 
 
@@ -371,8 +371,8 @@ df_joined["score_per_billion"] = (df_joined["average"] / df_joined["model_size"]
 df_joined["score_per_co2"] = (df_joined["average"] / df_joined["co₂ cost"]).round(2)
 
 
-df_joined.to_pickle("df_joined_clean.pkl")
-
+df_joined.to_pickle("./data/final/df_joined_clean.pkl")
+df_joined.to_csv("./data/final/df_joined_clean.csv", index=False)
 
 
 # ---------------- data exploration
