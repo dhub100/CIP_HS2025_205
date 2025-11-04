@@ -6,9 +6,9 @@ This part of the project was implemented by Daniel Huber.
 
 ### How it works
 
-This Python script connects to the Hugging Face API to retrieve metadata from the most downloaded Large Language Models (LLMs). The script is organized as a class (`HuggingFaceAPI`) that manages authentication via a secure token stored in a `.env` file, fetches model lists and detailed metadata, and processes the results into a structured `pandas` DataFrame.
+This Python script connects to the Hugging Face API to retrieve metadata from the most downloaded Large Language Models (LLMs). The script is organized as a class (`HuggingFaceAPI`) that manages authentication via a secure token stored in a `.env` file in the same folder, fetches model lists and detailed metadata, and processes the results into a structured `pandas` DataFrame.
 
-Key model attributes such as author, license, language, and model size are extracted and exported to a CSV file `huggingface_100_llm_metadata.csv`). This dataset serves as the foundation for further enrichment through web scraping and analysis in later project stages.
+Key model attributes such as author, license, language, and model size are extracted and exported to a CSV file in the data/raw folder (`huggingface_100_llm_metadata.csv`). This dataset serves as the foundation for further enrichment through web scraping and analysis in later project stages.
 
 ### Requirements
 
@@ -17,13 +17,15 @@ Key model attributes such as author, license, language, and model size are extra
 -   Required packages:
 
 ``` bash
-pip install requests pandas python-dotenv
+pip install os re requests pandas python-dotenv pathlib
 ```
 
 ### Usage
 
+Run the code from the project root (CIP_HS2025_205).
+
 ``` python
-from API_script_Dani import HuggingFaceAPI
+from modules.API_script import HuggingFaceAPI
 
 api = HuggingFaceAPI()
 models = api.get_top_models(limit=100)
