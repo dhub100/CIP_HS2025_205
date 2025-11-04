@@ -190,9 +190,10 @@ sns.scatterplot(
     alpha=0.6
 )
 
-plt.text(2, 0.0108, "mistralai/mistral-7b-v0.1", fontsize=9, weight="bold", color="#4CAF50")
-plt.text(3, 0.0061, "meta-llama/llama-2-7b-chat-hf", fontsize=9, weight="bold", color="black")
-plt.text(52, 0.0037, "meta-llama/llama-3.3-70b-instruct", fontsize=9, weight="bold", color="#FFB482")
+
+plt.text(2, 0.0070, "mistralai/mistral-7b-v0.1", fontsize=9, weight="bold", color="#4CAF50")
+plt.text(3, 0.0123, "meta-llama/llama-2-7b-chat-hf", fontsize=9, weight="bold", color="black")
+plt.text(52, 0.0035, "meta-llama/llama-3.3-70b-instruct", fontsize=9, weight="bold", color="#FFB482")
 
 ax = plt.gca()
 zone = patches.Rectangle(
