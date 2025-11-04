@@ -84,6 +84,8 @@ Install the required Python packages: `bash    pip install selenium`
 
 ### Usage
 
+Run the script for the project folder root.
+
 ``` python
 from hf_scrape import HFLeaderboardScraper
 
