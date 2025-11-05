@@ -29,14 +29,13 @@ print(df_all.duplicated().sum())
 print(df_lb.duplicated().sum())
 
 
-# df_lb had initally duplicate rows since this code is not needed
-# code is commented it out since now is redudant
+# df_lb has duplicate rows 
 
 duplicates=df_lb[df_lb.duplicated(keep=False)]
 duplicates.sort_values("Rank", ascending=True, inplace=True)
 print(duplicates)
 
-#---------- 1b we droped duplicate rows
+#---------- 1b we drop duplicate rows
 
 df_lb = df_lb.sort_values("Rank", ascending=True)
 df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
