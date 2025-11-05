@@ -384,3 +384,13 @@ This project demonstrated a complete data science workflow-from data collection 
 A significant limitation is sample size. The [HuggingFace Open Leaderboard](https://huggingface.co/spaces/open-llm-leaderboard/open_llm_leaderboard) displays 4,756 models as of November 2024, but we scraped only models retrieved from the API due to our method's inability to handle the scrollable table feature. This constraint affects our analysis in multiple ways: trends remain unclear (e.g., we cannot draw conclusions about models exceeding 20 billion parameters in Figure 1), statistical power is limited, and interpretations carry greater uncertainty. A more comprehensive scraping approach would enable collection of significantly more benchmark observations.
 
 In future steps, improving the scraping algorithm to handle scrollable table features would enable collection of substantially more observations, supporting more thorough statistical analysis and clearer identification of trends across the full model size spectrum.
+
+## Disclosure on the use of GenAI
+
+In this project, we assure that GenAI has been used in following way and nothing more.
+
+* Debugging and optimization: Gen-AI is a great tool for explaining error messages in understandable language. It is also suitable for optimizing non-functioning scripts that we had developed ourselves, which improves our
+project efficiency.
+* Information acquisition: Gen-AI is used for search of information about methodologies and code documentations, similar to how Google was used for searches. However, human verification of correctness and credibility of sources are crucial for us, because AI as a new technology that can provide inconsistent and incorrect results.
+* Proofreading: Gen-AI is deployed in accelerating the proofreading process, especially in detecting grammar and typo mistakes.
+* Code Documentation: Writting code documentation such as docstrings can be tedious. In such a task GenAI is of great help as, given proper instruction and model, it can understand the code and document it quite well.
