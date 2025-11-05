@@ -304,7 +304,7 @@ Figure 3: Average benchmark score by access type.
 Following the [Hugging Face Open LLM Leaderboard](https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard) convention, we define *practical accuracy* as achieving an average benchmark score above *25%*-the approximate level at which models demonstrate consistent reasoning and instruction-following capabilities. This threshold serves as an informative benchmark, not a strict pass/fail cutoff.
 :::
 
-To assess whether these performance differences are statistically significant, we conducted a *Welch's t-test* on average benchmark scores. This test does not assume equal variances or sample sizes—appropriate given that proprietary models are fewer but sometimes larger. The result (t = -1.02, p = 0.32) indicates no statistically significant difference between groups.
+To assess whether these performance differences are statistically significant, we conducted a *Welch's t-test* on average benchmark scores. This test does not assume equal variances or sample sizes—appropriate given that proprietary models are fewer but sometimes larger. The result (t = -1.23, p = 0.24) indicates no statistically significant difference between groups.
 
 To control for model size differences, we performed an *ANCOVA* with `average` score as the dependent variable, `log10(model_size)` as a covariate, and `access type` as a categorical predictor. The ANCOVA results show that model size significantly predicts performance: every ten-fold increase in parameters yields approximately a 15.6-point rise in average benchmark score. Crucially, access type (open-source vs. proprietary) shows no measurable effect when controlling for size. Model scale, not licensing status, is the primary driver of performance differences.
 

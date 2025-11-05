@@ -7,9 +7,9 @@ import requests
 from bs4 import BeautifulSoup
 import re
 
-#df_all = pd.read_csv("huggingface_llm_metadata.csv")
+
 df_all = pd.read_csv("./data/raw/huggingface_100_llm_metadata.csv")
-df_lb = pd.read_csv("./data/hf500_scraped.csv")
+df_lb = pd.read_csv("./data/raw/hf_leaderboard.csv")
 
 
 
@@ -32,15 +32,15 @@ print(df_lb.duplicated().sum())
 # df_lb had initally duplicate rows since this code is not needed
 # code is commented it out since now is redudant
 
-# duplicates=df_lb[df_lb.duplicated(keep=False)]
-# duplicates.sort_values("Rank", ascending=True, inplace=True)
-# print(duplicates)
+duplicates=df_lb[df_lb.duplicated(keep=False)]
+duplicates.sort_values("Rank", ascending=True, inplace=True)
+print(duplicates)
 
 #---------- 1b we droped duplicate rows
 
-# df_lb = df_lb.sort_values("Rank", ascending=True)
-# df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
-# df_lb.duplicated().sum() 
+df_lb = df_lb.sort_values("Rank", ascending=True)
+df_lb = df_lb.drop_duplicates(subset=["Model"], keep="first").reset_index(drop=True)
+df_lb.duplicated().sum() 
 
 
 # ----------- 1c Checking for na
