@@ -87,7 +87,7 @@ Install the required Python packages: `bash    pip install selenium`
 Run the script for the project folder root.
 
 ``` python
-from hf_scrape import HFLeaderboardScraper
+from modules.hf_scrape import HFLeaderboardScraper
 
 # Create scraper instance
 scraper = HFLeaderboardScraper(browser="safari")
@@ -117,12 +117,12 @@ Datasets were checked for duplicate row. Model names were than standardized by a
 
 The dataset were merged using an 'inner join' on the variable model. Missing mode_size values were retrieved through targeted web scrapping from the respective HuggingFace model pages using BeautifulSoup and regular expressions. Model_size variable was converted to bilions of parameters for consistency. Benchmark percentaged and CO₂ indicator were cleaned and transformed into int to allow analysis. Finally categorical symbold representing model types (🟢, 💬, 🔶) were mapped to string label. 
 
-The fully cleaned and joined dataset was saved as df_joned_clean.pkl for exporation and vizualisation.
+The fully cleaned and joined dataset was saved as `df_joned_clean.pkl` for exporation and vizualisation.
 
 
 ## Data analysis and visualization
 
-This section was developed by Alin Sever and finalized with support of Robin and Daniel.
+This section is a joint development by Alin, Daniel and Robin.
 
 Data exploration  examines the relashionship between model characteristics, average benchmar performance and efficiency. Exploratory visualizations were generated using Seaborn, Matplotlib, and Plotnine to illustrate key trends in the dataset. Initial analyses focused on the distribution of model sizes. Scatterplots and regression lines were used to assess the relationship between model size and performance, both on linear and logarithmic scales, revealing a strong positive association.
 
