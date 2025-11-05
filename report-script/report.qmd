@@ -393,4 +393,4 @@ In this project, we assure that GenAI has been used in following way and nothing
 project efficiency.
 * Information acquisition: Gen-AI is used for search of information about methodologies and code documentations, similar to how Google was used for searches. However, human verification of correctness and credibility of sources are crucial for us, because AI as a new technology that can provide inconsistent and incorrect results.
 * Proofreading: Gen-AI is deployed in accelerating the proofreading process, especially in detecting grammar and typo mistakes.
-* Code documentation: Writting code documentation such as docstrings can be tedious. In such a task GenAI is of great help as, given proper instruction and model, it can understand the code and document it quite well.
+* Code documentation: Writing code documentation such as docstrings can be tedious. In such a task GenAI is of great help as, given proper instruction and model, it can understand the code and document it quite well.
