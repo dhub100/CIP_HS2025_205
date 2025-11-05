@@ -29,3 +29,6 @@ _site/
 # --- Project-specific ---
 huggingface_llm_metadata.xlsx
 top_llms.txt
+
+!report_files/
+!report_files/**
